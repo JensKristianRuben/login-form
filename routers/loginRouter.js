@@ -2,11 +2,13 @@ import { Router } from 'express';
 
 const router = Router();
 
+
 const users = [
   { id: 1, email: "alice@example.com", password: "1234" },
   { id: 2, email: "bob@example.com", password: "secret" }
 ];
 
+//TODO: lav password hashed og gem dem in mem hashed - sammenlign med hashed med compare().
 
 
 router.post("/api/login", (req, res) => {
