@@ -2,6 +2,7 @@ import express from 'express';
 import generalLimiter from './util/generalLimiter.js';
 import PagesRouter from './routers/pagesRouter.js';
 import loginRouter from './routers/loginRouter.js';
+import registerRouter from './routers/registerRouter.js';
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(PagesRouter);
 app.use(loginRouter);
+app.use(registerRouter);
 
 
 
