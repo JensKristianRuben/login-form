@@ -4,12 +4,13 @@ const container = document.getElementById('container');
 
     goRight.addEventListener('click', () => {
       container.classList.add('right-active');
-      goLeft.style.display = 'block';
-      goRight.style.display = 'none';
+      goRight.classList.add('inactive');
+      goLeft.classList.add('active');
+
     });
 
     goLeft.addEventListener('click', () => {
       container.classList.remove('right-active');
-      goLeft.style.display = 'none';
-      goRight.style.display = 'block';
+      goLeft.classList.remove('active');
+      goRight.classList.remove('inactive');
     });

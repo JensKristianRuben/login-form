@@ -14,7 +14,7 @@ main {
   border-radius: 12px;
   overflow: hidden;
   background: #0f260f;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 form {
@@ -78,6 +78,7 @@ button {
   font-weight: bold;
   color: #333;
 }
+
 .side-btn {
   position: absolute;
   top: 50%;
@@ -99,6 +100,16 @@ button {
   left: 25%;
   display: none;
 }
+
+.active {
+  display: block;
+  transform: translateY(-5px);
+}
+
+.inactive {
+  display: none;
+}
+
 
 @media (max-width: 768px) {
   main {
@@ -163,4 +174,25 @@ button {
     z-index: 5;
     position: relative;
   }
+
+  .right-side {
+    top: 40%;
+    right: 40%;
+  }
+
+  .left-side {
+    top: 75%;
+    left: 40%;
+    display: none;
+  }
+
+  .active {
+    display: block;
+    transform: translateY(-5px);
+  }
+
+  .inactive {
+    display: none;
+  }
+
 }
