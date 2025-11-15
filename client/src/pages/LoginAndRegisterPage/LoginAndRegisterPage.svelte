@@ -30,6 +30,7 @@
       mode = "register";
       navigate("/register", { replace: true });
     }
+    
   });
 </script>
 
@@ -82,7 +83,7 @@
     class="right-form"
   >
     <label for="email">Email</label>
-    <input type="email" id="email" name="email" />
+    <input type="email" id="email" name="email"/>
 
     <label for="password">Password</label>
     <input type="password" id="registerPassword" name="registerPassword" />
@@ -134,7 +135,6 @@
     width: 50%;
     height: 100%;
     color: white;
-    z-index: 15;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -233,12 +233,12 @@
 
   .right-info {
     opacity: 0;
-    transform: translateX(50%);
+    transform: translateX(100%);
   }
 
   .left-active .right-form {
     opacity: 0;
-    transform: translateX(50%);
+    transform: translateX(100%);
   }
   .left-active .right-info {
     opacity: 1;
@@ -247,7 +247,7 @@
 
   .left-active .left-info {
     opacity: 0;
-    transform: translate(-50%);
+    transform: translate(-100%);
   }
   .left-active .left-form {
     opacity: 1;
