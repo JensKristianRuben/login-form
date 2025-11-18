@@ -31,7 +31,7 @@
 
 
   let email = "alice@example.com";
-  let password = "1234";
+  let password = "123456789";
   let shakeForm = false;
 
   async function handleLogin(event) {

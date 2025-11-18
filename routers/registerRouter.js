@@ -1,25 +1,26 @@
-import { Router } from 'express';
-import { users } from './loginRouter.js'
-import { hashPassword } from '../util/passwordUtil.js';
+import { Router } from "express";
+import { hashPassword } from "../util/passwordUtil.js";
+import supabase from "../util/supabaseClient.js";
 
 const router = Router();
 
 router.post("/api/register", async (req, res) => {
+  const email = req.body.email;
+  const password = req.body.registerPassword;
 
-    const email = req.body.email;
-    const password = req.body.registerPassword;
+  const hashedPassword = await hashPassword(password);
 
-    const existingUser = users.find(user => user.email === email);
+  const { data, error } = await supabase
+    .from("users")
+    .insert([{ email, password_hash: hashedPassword }])
+    .select();
 
-    if (existingUser) {
-        return res.status(400).send({ error: "Bad request" });
-    }
-        const hashedPassword = await hashPassword(password);
-        const newUser = { email, hashedPassword };
-        users.push(newUser);
-        
-        return res.status(201).send({ data: "User created" });
+  if (error) {
+    console.error(error);
+    return res.status(500).send({ error: "Could not create user" });
+  }
 
-})
+  res.status(201).send({ data: "User created" });
+});
 
 export default router;
