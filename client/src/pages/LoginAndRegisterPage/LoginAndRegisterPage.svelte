@@ -42,8 +42,9 @@
       headers: { "Content-type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
         email,
-        password,
+        password
       }),
+      credentials: "include"
     });
 
     if (response.status === 200) {
