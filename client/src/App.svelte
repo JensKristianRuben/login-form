@@ -5,6 +5,7 @@
   import { get } from "svelte/store";
   import LoginAndRegisterPage from "./pages/LoginAndRegisterPage/LoginAndRegisterPage.svelte";
   import SuccesPage from "./pages/SuccessPage/SuccesPage.svelte";
+  import PasswordPage from './pages/PasswordPage/PasswordPage.svelte'
 
   onMount(async () => {
     try {
@@ -72,6 +73,12 @@
   <Route path="/succes">
     {#if guard("/succes")}
       <SuccesPage />
+    {/if}
+  </Route>
+
+  <Route path="/password">
+    {#if guard("/succes")}
+      <PasswordPage />
     {/if}
   </Route>
 </Router>
