@@ -16,7 +16,6 @@ router.post("/api/register", async (req, res) => {
     return res.status(400).send({ error: "Email and password are required" });
   }
 
-
   try {
     const hashedPassword = await hashPassword(password);
 
@@ -25,12 +24,14 @@ router.post("/api/register", async (req, res) => {
 
     const { data, error } = await supabase
       .from("users")
-      .insert([{
-        email,
-        password_hash: hashedPassword,
-        activation_token: activationToken,
-        token_expires: tokenExperation
-      }])
+      .insert([
+        {
+          email,
+          password_hash: hashedPassword,
+          activation_token: activationToken,
+          token_expires: tokenExperation,
+        },
+      ])
       .select();
 
     if (error) {
@@ -57,16 +58,47 @@ router.post("/api/register", async (req, res) => {
     // };
 
     res.status(201).send({ data: "User created. Activation email sent." });
-
   } catch (error) {
-
     return res.status(500).send({ error: "Internal server error" });
-
   }
 
+  router.get("/api/active", async (req, res) => {
+    const token = req.query.token;
 
+    if (!token) {
+      return res.status(400).send({ error: "No such token" });
+    }
 
+    const { data: user, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("activation_token", token)
+      .single();
 
+    if (error || !user) {
+      return res.status(400).send({ error: "No such token" });
+    }
+
+    if (new Date(user.token_expires) < new Date()) {
+      return res.status(400).send({error: ("Token expired")})
+    }
+
+    const { error: updateError } = supabase
+    .from(users)
+    .update({
+      is_active: true,
+      activation_token: null,
+      token_expires: null,
+    })
+    .eq("id", user.id)
+
+    if (updateError) {
+      res.status(400).send({error: "Activation failed"});
+    }
+
+     return res.redirect("https://arbezzebra.dk/login");
+
+  });
 });
 
 export default router;
