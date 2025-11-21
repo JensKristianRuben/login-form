@@ -37,7 +37,7 @@
   async function handleLogin(event) {
     event.preventDefault();
 
-    const response = await fetch("http://localhost:8080/api/login", {
+    const response = await fetch("https://www.arbezzebra.dk/api/login", {
       method: "POST",
       headers: { "Content-type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
@@ -103,7 +103,7 @@
     >
   </div>
   <form
-    action="http://localhost:8080/api/register"
+    action="https://www.arbezzebra.dk/api/register"
     method="POST"
     class="right-form"
   >
