@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, "client", "dist")));
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://arbezzebra.dk"],
+    origin: "https://arbezzebra.dk",
     credentials: true,
   })
 );
@@ -35,6 +35,7 @@ app.use(
     cookie: { secure: false },
   })
 );
+
 app.use(generalLimiter);
 app.use(helmet());
 app.use(loginRouter);
