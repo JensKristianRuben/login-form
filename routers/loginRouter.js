@@ -16,6 +16,7 @@ router.post("/api/login", async (req, res) => {
       .eq("email", email)
       .limit(1);
 
+      
     if (error) {
       console.error(error);
       return res.status(500).send({ error: "Database error" });
