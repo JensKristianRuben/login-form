@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, "client", "dist")));
 
 app.use(
   cors({
-    origin: "https://arbezzebra.dk",
+    origin: ["https://arbezzebra.dk", "https://www.arbezzebra.dk"],
     credentials: true,
   })
 );
