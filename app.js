@@ -43,13 +43,16 @@ app.use(registerRouter);
 app.use(logoutRouter);
 app.use(sessionRouter);
 
-app.get("/api/something", (req, res) => {
-  res.send({data: "something"})
-})
+console.log("SERVING STATIC FROM:", path.join(__dirname, "client/dist"));
 
-app.get("/{*splat}", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+app.get("/api/something", (req, res) => {
+  res.send({ data: "something" });
 });
+
+  app.get("/{*splat}", (req, res) => {
+    // res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+    res.redirect("/");
+  });
 
 const PORT = Number(process.env.PORT);
 
