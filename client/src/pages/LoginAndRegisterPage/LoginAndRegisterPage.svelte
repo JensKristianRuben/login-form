@@ -37,7 +37,7 @@
   async function handleLogin(event) {
     event.preventDefault();
 
-    const response = await fetch(`${import.meta.env.VITE_API_URL}api/login`, {
+    const response = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
@@ -103,7 +103,7 @@
     >
   </div>
   <form
-    action="${import.meta.env.VITE_API_URL}/api/register"
+    action="/api/register"
     method="POST"
     class="right-form"
   >
