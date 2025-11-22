@@ -106,7 +106,7 @@
     action="/api/register"
     method="POST"
     class="right-form"
-  >
+  > 
     <label for="email">Email</label>
     <input type="email" id="email" name="email" />
 
