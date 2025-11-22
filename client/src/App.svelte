@@ -31,7 +31,7 @@
 
   async function guard(path) {
     if (!get(user)) {
-      const res = await fetch(""/api/session", {
+      const res = await fetch("/api/session", {
         credentials: "include",
       });
       if (res.ok) {
