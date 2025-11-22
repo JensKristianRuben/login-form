@@ -11,7 +11,6 @@ import cors from "cors";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 
-
 const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -32,7 +31,10 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true },
+    cookie: {
+      secure: true,
+      sameSite: "none",
+    },
   })
 );
 
