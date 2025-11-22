@@ -43,7 +43,7 @@ app.use(registerRouter);
 app.use(logoutRouter);
 app.use(sessionRouter);
 
-app.get("/something", (req, res) => {
+app.get("/api/something", (req, res) => {
   res.send({data: "something"})
 })
 
