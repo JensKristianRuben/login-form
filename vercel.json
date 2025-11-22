@@ -2,6 +2,12 @@
   "version": 2,
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1.js" },
+
+    { "src": "/assets/(.*)", "dest": "/client/dist/assets/$1" },
+    { "src": "/(.*\\.js)", "dest": "/client/dist/$1" },
+    { "src": "/(.*\\.css)", "dest": "/client/dist/$1" },
+    { "src": "/favicon.ico", "dest": "/client/dist/favicon.ico" },
+
     { "src": "/(.*)", "dest": "/client/dist/index.html" }
   ]
 }
