@@ -49,10 +49,9 @@ app.get("/api/something", (req, res) => {
   res.send({ data: "something" });
 });
 
-  app.get("/{*splat}", (req, res) => {
-    // res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
-    res.redirect("/");
-  });
+app.get("/{*splat}", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/dist/index.html"));
+});
 
 const PORT = Number(process.env.PORT);
 
