@@ -2,7 +2,7 @@
   import { navigate } from "svelte-routing";
 
   async function logout() {
-    const response = await fetch("http://localhost:8080/api/logout", {
+    const response = await fetch(`${URL}api/logout`, {
         method: "POST",
         credentials: "include"
     });

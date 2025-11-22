@@ -37,7 +37,7 @@
   async function handleLogin(event) {
     event.preventDefault();
 
-    const response = await fetch("https://www.arbezzebra.dk/api/login", {
+    const response = await fetch(`${URL}api/login`, {
       method: "POST",
       headers: { "Content-type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
