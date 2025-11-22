@@ -11,7 +11,7 @@
 
   onMount(async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}api/session`, {
+      const res = await fetch(`https://www.arbezzebra.dk/api/session`, {
         credentials: "include",
       });
       if (res.ok) {
@@ -31,7 +31,7 @@
 
   async function guard(path) {
     if (!get(user)) {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}api/session`, {
+      const res = await fetch(`https://www.arbezzebra.dk/api/session`, {
         credentials: "include",
       });
       if (res.ok) {
