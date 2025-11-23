@@ -19,12 +19,15 @@ const __dirname = dirname(__filename);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "client", "dist")));
 
+app.use(helmet());
+
 app.use(
   cors({
     origin: ["https://arbezzebra.dk", "https://www.arbezzebra.dk"],
     credentials: true,
   })
 );
+
 
 app.use(
   session({
@@ -39,7 +42,6 @@ app.use(
 );
 
 app.use(generalLimiter);
-app.use(helmet());
 app.use(loginRouter);
 app.use(registerRouter);
 app.use(logoutRouter);
@@ -51,9 +53,13 @@ app.get("/api/something", (req, res) => {
   res.send({ data: "something" });
 });
 
-app.get("/{*splat}", (req, res) => {
+app.get("/passwords", (req, res) => {
   res.sendFile(path.join(__dirname, "client/dist/index.html"));
 });
+
+// app.get("/{*splat}", (req, res) => {
+//   res.sendFile(path.join(__dirname, "client/dist/index.html"));
+// });
 
 const PORT = Number(process.env.PORT);
 
