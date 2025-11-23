@@ -71,9 +71,9 @@
   </Route>
 
   <Route path="/succes">
-    {#if guard("/succes")}
+    <!-- {#if guard("/succes")} -->
       <SuccesPage />
-    {/if}
+    <!-- {/if} -->
   </Route>
 
   <Route path="/passwords">
