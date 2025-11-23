@@ -6,14 +6,15 @@ import loginRouter from "./routers/loginRouter.js";
 import registerRouter from "./routers/registerRouter.js";
 import logoutRouter from "./routers/logoutRouter.js";
 import sessionRouter from "./routers/sessionRouter.js";
+import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import cors from "cors";
-import connectPgSimple from "connect-pg-simple";
+import SupabaseStore from "./stores/supabaseStore.js";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 
 const app = express();
-const PgStore = connectPgSimple(session);
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -21,6 +22,8 @@ const __dirname = dirname(__filename);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json());
+app.use(cookieParser(process.env.SESSION_SECRET));
 
 app.use(helmet());
 
@@ -42,18 +45,32 @@ app.use(
 //     },
 //   })
 // );
+// app.use(
+//   session({
+//     store: new PgStore({
+//       conString: process.env.SUPABASE_DB_URL,
+//       tableName: "sessions",
+//       createTableIfMissing: false,
+//     }),
+//     secret: process.env.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//       secure: true,
+//       sameSite: "lax",
+//       maxAge: 1000 * 60 * 60 * 24,
+//     },
+//   })
+// );
+
 app.use(
   session({
-    store: new PgStore({
-      conString: process.env.SUPABASE_DB_URL,
-      tableName: "sessions",
-      createTableIfMissing: false,
-    }),
+    store: new SupabaseStore(),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: true,
+      secure: false,
       sameSite: "lax",
       maxAge: 1000 * 60 * 60 * 24,
     },
