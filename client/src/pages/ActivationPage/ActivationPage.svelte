@@ -14,7 +14,7 @@
     }
 
     try {
-      const res = await fetch("/api/activate", {
+      const res = await fetch("/api/activation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token }),
