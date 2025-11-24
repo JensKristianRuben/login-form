@@ -7,13 +7,11 @@
 
   function goToLogin() {
     mode = "login";
-    console.log(mode);
     navigate("/#login");
   }
 
   function goToRegister() {
     mode = "register";
-    console.log(mode);
     navigate("/#register");
   }
 
@@ -69,6 +67,7 @@
       Join our community and unlock amazing features. Create your account in
       seconds.
     </p>
+    <img src="/a-way-in.png" alt="logo" />
     <button
       type="button"
       id="goRight"
@@ -95,6 +94,7 @@
     <p class="info-box-text">
       Already part of our community? Log in in seconds.
     </p>
+    <img src="/a-way-in.png" alt="logo" />
     <button
       type="button"
       id="goLeft"
@@ -102,11 +102,7 @@
       on:click={goToLogin}>Already have Account?</button
     >
   </div>
-  <form
-    action="/api/register"
-    method="POST"
-    class="right-form"
-  > 
+  <form action="/api/register" method="POST" class="right-form">
     <label for="email">Email</label>
     <input type="email" id="email" name="email" />
 
@@ -123,8 +119,8 @@
 <style>
   .login-and-register-main-container {
     position: relative;
-    width: 800px;
-    height: 400px;
+    width: 100vw;
+    height: 100vh;
     border-radius: 12px;
     overflow: hidden;
     background: #0f260f;
@@ -143,6 +139,7 @@
     transition:
       transform 0.6s ease-in-out,
       opacity 0.6s ease-in-out;
+    gap: 1rem;
   }
 
   .left-form {
@@ -174,7 +171,7 @@
   .info-box h2 {
     font-size: 2rem;
     font-weight: 700;
-    margin: 0 0 1rem 0;
+    margin: 2rem 0 1rem 0;
   }
 
   .info-box p {
@@ -197,6 +194,14 @@
     transition:
       transform 0.2s ease,
       background 0.2s ease;
+  }
+
+  .info-box img {
+    display: block;
+    margin: 1rem auto;
+    max-width: 150px;
+    height: auto;
+    border-radius: 8px;
   }
 
   .left-info {
@@ -280,10 +285,12 @@
   }
 
   input {
+    width: 50%;
     padding: 8px 12px;
     border-radius: 6px;
     border: none;
     outline: none;
+    box-sizing: border-box;
   }
 
   form button[type="submit"] {
@@ -297,7 +304,12 @@
   }
 
   form label {
+    display: block;
+    text-align: left;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
     color: white;
+    width: 50%;
   }
 
   form.shake {
