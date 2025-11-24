@@ -6,6 +6,7 @@ import loginRouter from "./routers/loginRouter.js";
 import registerRouter from "./routers/registerRouter.js";
 import logoutRouter from "./routers/logoutRouter.js";
 import sessionRouter from "./routers/sessionRouter.js";
+import activationPage from './routers/activationRouter.js'
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import cors from "cors";
@@ -41,7 +42,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: true,
+      secure: false,
       sameSite: "lax",
       maxAge: 1000 * 60 * 60 * 24,
     },
@@ -53,14 +54,7 @@ app.use(loginRouter);
 app.use(registerRouter);
 app.use(logoutRouter);
 app.use(sessionRouter);
-
-app.get("/api/something", (req, res) => {
-  res.send({ data: "something" });
-});
-
-app.get("/passwords", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/index.html"));
-});
+app.use(activationPage);
 
 app.get("/{*splat}", (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
