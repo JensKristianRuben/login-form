@@ -56,10 +56,6 @@ app.use(logoutRouter);
 app.use(sessionRouter);
 app.use(activationPage);
 
-app.get("/passwords", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/index.html"));
-});
-
 app.get("/{*splat}", (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });

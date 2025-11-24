@@ -4,7 +4,6 @@
   import { user } from "./stores/clientAuth";
   import { get } from "svelte/store";
   import LoginAndRegisterPage from "./pages/LoginAndRegisterPage/LoginAndRegisterPage.svelte";
-  import SuccesPage from "./pages/SuccessPage/SuccesPage.svelte";
   import PasswordPage from "./pages/PasswordPage/PasswordPage.svelte";
   import ActivationPage from "./pages/ActivationPage/ActivationPage.svelte";
   import toastr from "toastr";
@@ -72,12 +71,6 @@
   
   <Route path="/activation">
     <ActivationPage />
-  </Route>
-  
-  <Route path="/succes">
-    <!-- {#if guard("/succes")} -->
-    <SuccesPage />
-    <!-- {/if} -->
   </Route>
 
   <Route path="/passwords">
