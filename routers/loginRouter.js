@@ -38,7 +38,6 @@ router.post("/api/login", async (req, res) => {
     }
 
     req.session.userId = user.id;
-    console.log("Session after login:", req.session);
 
     res.status(200).send({
       data: {
@@ -48,7 +47,6 @@ router.post("/api/login", async (req, res) => {
       },
     });
   } catch (error) {
-    console.error(error);
     res.status(500).send({ error: "Internal server error" });
   }
 });
