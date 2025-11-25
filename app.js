@@ -22,7 +22,9 @@ const __dirname = dirname(__filename);
 
 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
+// app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "client/dist")));
+app.use(express.static(path.join(__dirname, "client/dist/assets")));
 app.use(express.json());
 app.use(cookieParser(process.env.SESSION_SECRET));
 
@@ -57,7 +59,7 @@ app.use(sessionRouter);
 app.use(activationPage);
 
 app.get("/{*splat}", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/index.html"));
+  res.sendFile(path.join(__dirname, "client/dist/index.html"));
 });
 
 const PORT = Number(process.env.PORT);
