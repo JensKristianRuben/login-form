@@ -1,5 +1,5 @@
 <script>
-  import { Router, Route } from "svelte-routing";
+  import { Router, Route, navigate } from "svelte-routing";
   import { onMount } from "svelte";
   import { user } from "./stores/clientAuth";
   import LoginAndRegisterPage from "./pages/LoginAndRegisterPage/LoginAndRegisterPage.svelte";
@@ -9,8 +9,9 @@
   import PrivateRouteGuard from "./components/PrivateRouteGuard.svelte";
 
   onMount(async () => {
+  
     try {
-      const res = await fetch("/api/session", {
+      const res = await fetch("http://localhost:8080/api/session", {
         credentials: "include",
       });
       if (res.ok) {
@@ -49,10 +50,6 @@
       on:goRegister={goToRegister}
     />
   </Route>
-
-  <!-- <Route path="/activation">
-    <ActivationPage />
-  </Route> -->
 
   <PrivateRouteGuard path="/passwords" component={PasswordPage} />
   <PrivateRouteGuard path="/activation" component={ActivationPage} />

@@ -1,6 +1,6 @@
 <script>
   import { user, redirectAfterLogin } from "../stores/clientAuth.js";
-  import { navigate } from "svelte-routing";
+  import { navigate, Route } from "svelte-routing";
 
   export let path;
   export let component;
@@ -9,11 +9,10 @@
     redirectAfterLogin.set(path);
     navigate("/", { replace: true });
   }
-  
 </script>
 
-{#if $user}
-  <svelte:component this={component} />
-{:else if $user === undefined}
-  <div>Loading…</div>
-{/if}
+<Route {path} >
+  {#if $user}
+    <svelte:component this={component} />
+  {/if}
+</Route>

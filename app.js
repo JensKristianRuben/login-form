@@ -34,7 +34,7 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: ["https://arbezzebra.dk", "https://www.arbezzebra.dk"],
+    origin: ["https://arbezzebra.dk", "https://www.arbezzebra.dk", "http://localhost:5173"],
     credentials: true,
   })
 );
@@ -59,6 +59,7 @@ app.use(registerRouter);
 app.use(logoutRouter);
 app.use(sessionRouter);
 app.use(activationPage);
+ 
 
 app.get("/{*splat}", (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
