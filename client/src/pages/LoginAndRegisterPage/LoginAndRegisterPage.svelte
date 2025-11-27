@@ -1,7 +1,7 @@
 <script>
   import { navigate } from "svelte-routing";
   import { onMount } from "svelte";
-  import { user } from "../../stores/clientAuth.js";
+  import { user, redirectAfterLogin } from "../../stores/clientAuth.js";
 
   export let mode;
 
@@ -49,6 +49,10 @@
       const result = await response.json();
       user.set(result.data);
       navigate("/passwords");
+      if ($redirectAfterLogin) {
+        navigate($redirectAfterLogin);
+        redirectAfterLogin.set(null);
+      }
     } else {
       shakeForm = true;
       setTimeout(() => (shakeForm = false), 500);
@@ -135,13 +139,23 @@
   </div>
   <form class="right-form" on:submit={register}>
     <label for="email">Email</label>
-    <input type="email" id="email" name="email" bind:value={registerEmail}/>
+    <input type="email" id="email" name="email" bind:value={registerEmail} />
 
     <label for="password">Password</label>
-    <input type="password" id="registerPassword" name="registerPassword" bind:value={registerPassword} />
+    <input
+      type="password"
+      id="registerPassword"
+      name="registerPassword"
+      bind:value={registerPassword}
+    />
 
     <label for="password2">Repeat Password</label>
-    <input type="password" id="registerPassword2" name="registerPassword2" bind:value={registerPassword2} />
+    <input
+      type="password"
+      id="registerPassword2"
+      name="registerPassword2"
+      bind:value={registerPassword2}
+    />
 
     <button type="submit">Register</button>
   </form>

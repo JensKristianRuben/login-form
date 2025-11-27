@@ -50,13 +50,10 @@
     />
   </Route>
 
-  <Route path="/activation">
+  <!-- <Route path="/activation">
     <ActivationPage />
-  </Route>
+  </Route> -->
 
   <PrivateRouteGuard path="/passwords" component={PasswordPage} />
-  
-  <!-- <Route path="/passwords">
-    <PasswordPage />
-  </Route> -->
+  <PrivateRouteGuard path="/activation" component={ActivationPage} />
 </Router>
