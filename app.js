@@ -61,9 +61,9 @@ app.use(sessionRouter);
 app.use(activationPage);
  
 
-app.get("/{*splat}", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/index.html"));
-});
+// app.get("/{*splat}", (req, res) => {
+//   res.sendFile(path.join(__dirname, "public/index.html"));
+// });
 
 const PORT = Number(process.env.PORT);
 
