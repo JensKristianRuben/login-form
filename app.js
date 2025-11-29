@@ -6,7 +6,8 @@ import loginRouter from "./routers/loginRouter.js";
 import registerRouter from "./routers/registerRouter.js";
 import logoutRouter from "./routers/logoutRouter.js";
 import sessionRouter from "./routers/sessionRouter.js";
-import activationPage from './routers/activationRouter.js'
+import passwordRouter from './routers/passwordsRouter.js'
+import activationPage from './routers/activationRouter.js';
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import cors from "cors";
@@ -16,6 +17,7 @@ import { fileURLToPath } from "url";
 
 // todo: lav side session guards
 // todo: forgot password
+// todo: encryptpasswords
 
 
 const app = express();
@@ -58,6 +60,7 @@ app.use(loginRouter);
 app.use(registerRouter);
 app.use(logoutRouter);
 app.use(sessionRouter);
+app.use(passwordRouter)
 app.use(activationPage);
  
 

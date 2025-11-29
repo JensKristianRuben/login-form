@@ -1,7 +1,8 @@
 <script>
   import { navigate } from "svelte-routing";
-  import PasswordCard from "../../components/passwordCard.svelte";
+  import PasswordCard from "../../components/passwordPage/passwordCard.svelte";
   import Sidebar from "../../components/sidebar.svelte";
+  import CreatePasswordModal from "../../components/passwordPage/CreatePasswordModal.svelte";
 
   async function logout() {
     const response = await fetch("http://localhost:8080/api/logout", {
@@ -16,21 +17,45 @@
     navigate("/");
   }
 
-  let passwords = [
+  let passwords = $state([
     { id: 1, title: "Netflix", user: "sejefyr1234", pass: "..." },
     { id: 2, title: "Spotify", user: "musiclover", pass: "..." },
     { id: 3, title: "Bank", user: "secureuser", pass: "..." },
     { id: 4, title: "Social Media", user: "meonly", pass: "..." },
-  ];
+  ]);
+
+  
+  
+
+  function handleNewPassword(newPassword) {
+    passwords = [...passwords, newPassword];
+    console.log(passwords);
+  }
+
+  let isModalOpen = $state(false);
+
+  function openModal() {
+    isModalOpen = true;
+  }
+
+  function closeModal() {
+    isModalOpen = false;
+  }
 </script>
 
 <Sidebar />
+
+<CreatePasswordModal
+  onClose={closeModal}
+  class={isModalOpen ? "is-open" : ""}
+  onSave={handleNewPassword}
+/>
 
 <main class="passwords-main">
   <div class="logo-and-create-password-wrapper">
     <img src="/a-way-in.png" alt="awayinvault logo" class="logo-create-btn" />
     <h1>AwayinVault</h1>
-    <button class="add-password-button">+</button>
+    <button class="add-password-button" onclick={openModal}>+</button>
   </div>
   <div class="search-wrapper">
     <svg
@@ -167,50 +192,5 @@
     padding: 20px;
     gap: 20px;
     justify-items: center;
-  }
-
-  .passwords-grid-container {
-    background-color: #082114;
-    border: 1px solid #6fbd96;
-    width: 400px;
-    height: 250px;
-    border-radius: 10px;
-    padding: 10px;
-  }
-
-  .passwords-grid-container-info {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  .passwords-grid-container-title {
-    width: 100%;
-    color: white;
-    font-family: "Montserrat", sans-serif;
-    font-size: 700;
-  }
-
-  .passwords-grid-container-info-item {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    background-color: #17362680;
-    border-radius: 5px;
-    padding: 10px;
-  }
-
-  .passwords-grid-container-info-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .passwords-grid-container-info-item-wrapper {
-    width: 100%;
-  }
-  .passwords-grid-container-info-item-wrapper p {
-    color: white;
-    margin: 0;
   }
 </style>
