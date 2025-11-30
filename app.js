@@ -15,9 +15,16 @@ import SupabaseStore from "./stores/supabaseStore.js";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 
-// todo: lav side session guards
+// todo: udfyld password kortene så de holder alle data
+// todo: lav slette funktion på password kortene
+// todo: lav update funktion på password kortene
+// todo: lav se password på kortene
+// todo: lav kopir på kortene 
+// todo: lav søge funktion mellem kortene
+// todo: lav roll password funktion til random password
 // todo: forgot password
-// todo: encryptpasswords
+// todo: update password
+// todo: encryptpasswords - bruger skal bruge deres masterpassword - find på flow for om de skal skrive det hver gang eller kun en gang?
 
 
 const app = express();
@@ -64,9 +71,9 @@ app.use(passwordRouter)
 app.use(activationPage);
  
 
-// app.get("/{*splat}", (req, res) => {
-//   res.sendFile(path.join(__dirname, "public/index.html"));
-// });
+app.get("/{*splat}", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/index.html"));
+});
 
 const PORT = Number(process.env.PORT);
 

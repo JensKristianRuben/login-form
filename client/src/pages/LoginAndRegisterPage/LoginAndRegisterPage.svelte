@@ -73,7 +73,7 @@
     }
     passwordMismatch = false;
 
-    const response = await fetch("/api/register", {
+    const response = await fetch("http://localhost:8080/api/register", {
       method: "POST",
       headers: { "Content-type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
@@ -82,6 +82,11 @@
       }),
       credentials: "include",
     });
+
+    if (!response.ok) {
+      const result = await response.json();
+      return console.error("there was an error registering: ", result.error);
+    }
 
     if (response.ok) {
       navigate("/#login");

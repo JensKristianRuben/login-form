@@ -3,6 +3,7 @@
   import PasswordCard from "../../components/passwordPage/passwordCard.svelte";
   import Sidebar from "../../components/sidebar.svelte";
   import CreatePasswordModal from "../../components/passwordPage/CreatePasswordModal.svelte";
+  import { onMount } from "svelte";
 
   async function logout() {
     const response = await fetch("http://localhost:8080/api/logout", {
@@ -17,19 +18,24 @@
     navigate("/");
   }
 
-  let passwords = $state([
-    { id: 1, title: "Netflix", user: "sejefyr1234", pass: "..." },
-    { id: 2, title: "Spotify", user: "musiclover", pass: "..." },
-    { id: 3, title: "Bank", user: "secureuser", pass: "..." },
-    { id: 4, title: "Social Media", user: "meonly", pass: "..." },
-  ]);
+  let passwordsList = $state([]);
 
-  
-  
+  async function fetchPasswords(params) {
+    let response = await fetch("http://localhost:8080/api/passwords", {
+      method: "GET",
+      credentials: "include",
+    });
+
+    const data = await response.json();
+
+    passwordsList = data;
+  }
+
+  onMount(fetchPasswords);
 
   function handleNewPassword(newPassword) {
-    passwords = [...passwords, newPassword];
-    console.log(passwords);
+    passwordsList = [...passwordsList, newPassword];
+    console.log(passwordsList);
   }
 
   let isModalOpen = $state(false);
@@ -84,8 +90,10 @@
   </div>
 
   <div class="passwords-grid">
-    {#each passwords as password (password.id)}
-      <PasswordCard title={password.title} />
+    {#each passwordsList as password (password.id)}
+      <PasswordCard 
+      title={password.website}
+      username={password.username} />
     {/each}
   </div>
 </main>

@@ -1,5 +1,6 @@
 <script>
   export let title;
+  export let username;
 
   function handleEdit() {
     console.log(`Redigerer ${title}`);
@@ -57,8 +58,8 @@
   <div class="passwords-grid-container-info-wrapper">
     <div class="passwords-grid-container-info-item">
       <div class="passwords-grid-container-info-item-wrapper">
-        <p></p>
-        <p></p>
+        <p>Username</p>
+        <p>{username}</p>
       </div>
       <button aria-label="Copy"
         ><svg
@@ -80,8 +81,8 @@
     </div>
     <div class="passwords-grid-container-info-item">
       <div class="passwords-grid-container-info-item-wrapper">
-        <p></p>
-        <p></p>
+        <p>Password</p>
+        <p>••••••••••</p>
       </div>
       <button aria-label="Copy"
         ><svg

@@ -38,4 +38,26 @@ router.post("/api/passwords", requireAuth, async (req, res) => {
   }
 });
 
+router.get("/api/passwords", requireAuth, async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const { data, error } = await supabase
+      .from("passwords")
+      .select("*")
+      .eq("user_id", userId);
+
+    if (error) {
+      console.error("Couldnt read passwords", error.message);
+      return res.status(500).send({ error: "Database error" });
+    }
+
+    return res.status(200).send(data)
+
+  } catch (err) {
+    console.error("Server error:", err);
+    res.status(500).send({ error: "Internal server error" });
+  }
+});
+
 export default router;
