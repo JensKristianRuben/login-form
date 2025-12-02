@@ -6,6 +6,8 @@
   import MasterPasswordModal from "../../components/passwordPage/MasterPasswordModal.svelte";
   import { onMount } from "svelte";
 
+  let passwordToDecrypt = $state(null);
+
   async function logout() {
     const response = await fetch("http://localhost:8080/api/logout", {
       method: "POST",
@@ -56,13 +58,24 @@
     isMasterPasswordModalOpen = false;
   }
 
-  function openMasterPasswordModal() {
-    console.log("heeeej");
+  function openMasterPasswordModal(encryptedPassword) {
+    passwordToDecrypt = encryptedPassword;
+    console.log(passwordToDecrypt, "From openmasterpasswordmodal");
     
     isMasterPasswordModalOpen = true;
   }
 
+  function handleMasterPasswordVerification(masterPassword) {
+    const key = masterPassword;
+    const encryptedValue = passwordToDecrypt;
 
+    if (key && encryptedValue) {
+      console.log("Master Password:", key);
+      console.log("Krypteret Værdi:", encryptedValue);
+      
+      passwordToDecrypt = null;
+    }
+  }
 </script>
 
 <Sidebar />
@@ -77,6 +90,7 @@
 <MasterPasswordModal
   onClose={closeMasterPasswordModal}
   class={isMasterPasswordModalOpen ? "is-open" : ""}
+  onVerify={handleMasterPasswordVerification}
 />
 
 <main class="passwords-main">

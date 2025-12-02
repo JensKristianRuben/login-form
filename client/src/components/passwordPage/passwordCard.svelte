@@ -15,9 +15,8 @@
   }
 
   function handleShowPassword() {
-    console.log("Hej Fra passwordcard modulet");
     
-    onWatchClick();
+    onWatchClick(encrypted_password);
   }
   
 </script>
