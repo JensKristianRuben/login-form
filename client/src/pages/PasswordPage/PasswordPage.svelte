@@ -8,6 +8,8 @@
   import CryptoJS from "crypto-js";
 
   let passwordToDecrypt = $state(null);
+  let selectedPasswordId = $state(null);
+  let decryptedPasswords = $state({});
 
   async function logout() {
     const response = await fetch("http://localhost:8080/api/logout", {
@@ -59,7 +61,8 @@
     isMasterPasswordModalOpen = false;
   }
 
-  function openMasterPasswordModal(encryptedPassword) {
+  function openMasterPasswordModal(id, encryptedPassword) {
+    selectedPasswordId = id;
     passwordToDecrypt = encryptedPassword;
 
     isMasterPasswordModalOpen = true;
@@ -68,27 +71,26 @@
   async function handleMasterPasswordVerification(masterPassword) {
     const key = masterPassword;
     const encryptedValue = passwordToDecrypt;
+    const currentId = selectedPasswordId;
 
-    if (key && encryptedValue) {
+    if (key && encryptedValue && currentId) {
       try {
         const decryptedPassword = await decryptPassword(key, encryptedValue);
-        
+
         if (!decryptedPassword) {
-          console.error(
-            "Wrong masterpassword or the drcryption failed"
-          );
+          console.error("Wrong masterpassword or the drcryption failed");
           return;
         }
 
-        console.log("Dekrypteret kodeord:", decryptedPassword);
-
-
-
+        decryptedPasswords = {
+          ...decryptedPasswords,
+          [currentId]: decryptedPassword};
       } catch (error) {
         console.error("Fejl under dekryptering/kryptering:", error);
       }
 
       passwordToDecrypt = null;
+      selectedPasswordId = null;
     }
   }
 
@@ -124,7 +126,7 @@
     });
 
     const originalText = decryptedBytes.toString(CryptoJS.enc.Utf8);
-    
+
     return originalText;
   }
 </script>
@@ -182,7 +184,9 @@
         title={password.website}
         username={password.username}
         encrypted_password={password.encrypted_password}
-        onWatchClick={openMasterPasswordModal}
+        onWatchClick={() =>
+          openMasterPasswordModal(password.id, password.encrypted_password)}
+        decrypted_password={decryptedPasswords[password.id]}
       />
     {/each}
   </div>

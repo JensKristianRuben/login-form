@@ -14,7 +14,6 @@
   }
 
   function handleVerifyClick() {
-    console.log("Handle verify");
     if (masterPassword) {
       onVerify?.(masterPassword);
       masterPassword = "";

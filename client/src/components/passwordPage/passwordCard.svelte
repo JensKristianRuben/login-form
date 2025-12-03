@@ -1,10 +1,10 @@
 <script>
 
 
-  let { title, username, encrypted_password, onWatchClick } = $props();
+  let { title, username, encrypted_password, onWatchClick, decrypted_password } = $props();
 
   let displayedPassword = $state("••••••••••");
-  let isLoading = $state(false);
+  // let isLoading = $state(false);
 
   function handleEdit() {
     console.log(`Redigerer ${title}`);
@@ -15,6 +15,8 @@
   }
 
   function handleShowPassword() {
+
+    // isLoading = true;
     
     onWatchClick(encrypted_password);
   }
@@ -92,7 +94,7 @@
     <div class="passwords-grid-container-info-item">
       <div class="passwords-grid-container-info-item-wrapper">
         <p>Password</p>
-        <p>{isLoading ? 'Dekrypterer...' : displayedPassword}</p>
+        <p>{decrypted_password ? decrypted_password : '••••••••••'}</p>
       </div>
       <button aria-label="Copy"
         ><svg
