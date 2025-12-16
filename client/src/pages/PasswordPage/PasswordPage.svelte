@@ -4,14 +4,50 @@
   import CreatePasswordModal from "../../components/passwordPage/CreatePasswordModal.svelte";
   import MasterPasswordModal from "../../components/passwordPage/MasterPasswordModal.svelte";
   import ConfirmModal from "../../components/passwordPage/ConfirmModal.svelte";
+  import EditPasswordModal from "../../components/passwordPage/EditPasswordModal.svelte";
+  import { flip } from "svelte/animate";
+  import { fly, fade } from "svelte/transition";
   import { onMount } from "svelte";
   import CryptoJS from "crypto-js";
 
   let passwordToDecrypt = $state(null);
   let selectedPasswordId = $state(null);
   let decryptedPasswords = $state({});
+  let searchQuery = $state("");
+
+  let isEditModalOpen = $state(false);
+  let passwordToEdit = $state(null);
 
   let passwordsList = $state([]);
+
+  let filteredPasswords = $derived(
+    passwordsList.filter((password) => {
+      const query = searchQuery.toLowerCase();
+      const website = password.website?.toLowerCase() || "";
+      const username = password.username?.toLowerCase() || "";
+      return website.includes(query) || username.includes(query);
+    })
+  );
+
+  function openEditModal(password) {
+    passwordToEdit = password;
+    isEditModalOpen = true;
+  }
+
+  function closeEditModal() {
+    isEditModalOpen = false;
+    passwordToEdit = null;
+  }
+
+  function handleSaveEditedPassword(updatedPassword) {
+    if (!updatedPassword) return;
+
+    passwordsList = passwordsList.map((password) =>
+      password.id === updatedPassword.id ? updatedPassword : password
+    );
+
+    closeEditModal();
+  }
 
   async function fetchPasswords() {
     let response = await fetch("http://localhost:8080/api/passwords", {
@@ -171,6 +207,13 @@
   onConfirm={confirmDeletion}
 />
 
+<EditPasswordModal
+  onClose={closeEditModal}
+  class={isEditModalOpen ? "is-open" : ""}
+  onSave={handleSaveEditedPassword}
+  passwordData={passwordToEdit}
+/>
+
 <main class="passwords-main">
   <div class="logo-and-create-password-wrapper">
     <img src="/a-way-in.png" alt="awayinvault logo" class="logo-create-btn" />
@@ -200,22 +243,31 @@
       id="passwordsSearchBar"
       placeholder="search passwords..."
       class="passwords-search-bar"
+      bind:value={searchQuery}
     />
   </div>
 
   <!-- TODO: send passwordet videre så det kan ses i kortet -->
   <div class="passwords-grid">
-    {#each passwordsList as password (password.id)}
-      <PasswordCard
-        title={password.website}
-        username={password.username}
-        encrypted_password={password.encrypted_password}
-        onWatchClick={() =>
-          openMasterPasswordModal(password.id, password.encrypted_password)}
-        decrypted_password={decryptedPasswords[password.id]}
-        onDeleteClick={() => handleDeletePasswordCard(password.id)}
-        id={password.id}
-      />
+    {#each filteredPasswords as password (password.id)}
+      <div
+        animate:flip={{ duration: 300 }}
+        in:fly={{ y: 20, duration: 300 }}
+        out:fade={{ duration: 200 }}
+        class="card-wrapper"
+      >
+        <PasswordCard
+          title={password.website}
+          username={password.username}
+          encrypted_password={password.encrypted_password}
+          onWatchClick={() =>
+            openMasterPasswordModal(password.id, password.encrypted_password)}
+          decrypted_password={decryptedPasswords[password.id]}
+          onDeleteClick={() => handleDeletePasswordCard(password.id)}
+          id={password.id}
+          onEdit={() => openEditModal(password)}
+        />
+      </div>
     {/each}
   </div>
 </main>

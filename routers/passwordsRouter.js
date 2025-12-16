@@ -59,11 +59,49 @@ router.post("/api/passwords", requireAuth, async (req, res) => {
   }
 });
 
+router.put("/api/passwords/:id", requireAuth, async (req, res) => {
+  const passwordId = req.params.id;
+  const { website, username, encrypted_password } = req.body;
+  const userId = req.user.id;
+
+  if (!website || !username || !encrypted_password) {
+    return res.status(400).send({ error: "Missing required attributes" });
+  }
+  try {
+    const { data, error } = await supabase
+      .from("passwords")
+      .update({
+        website: website,
+        username: username,
+        encrypted_password: encrypted_password,
+      })
+      .eq("id", passwordId)
+      .eq("user_id", userId)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Supabase update error:", error.message);
+      return res.status(500).send({ error: "Database error" });
+    }
+
+    if (!data) {
+      return res.status(404).send({ error: "Password not found or unauthorized" });
+    }
+
+    res.status(200).send(data)
+
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).send({ error: "Internal server error" });
+  }
+});
+
 router.delete("/api/passwords/:id", requireAuth, async (req, res) => {
   const passwordId = req.params.id;
 
   try {
-     const { data, error } = await supabase
+    const { data, error } = await supabase
       .from("passwords")
       .delete()
       .eq("id", passwordId)
@@ -74,8 +112,7 @@ router.delete("/api/passwords/:id", requireAuth, async (req, res) => {
       return res.status(500).send({ error: "Database error" });
     }
 
-    res.status(204).send({data});
-
+    res.status(204).send({ data });
   } catch (error) {
     console.error("Server error:", err);
     res.status(500).send({ error: "Internal server error" });

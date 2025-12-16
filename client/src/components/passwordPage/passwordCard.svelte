@@ -3,10 +3,10 @@
 
 
 
-  let { title, username, encrypted_password, onWatchClick, decrypted_password, onDeleteClick, id } = $props();
+  let { title, username, encrypted_password, onWatchClick, decrypted_password, onDeleteClick, id, onEdit } = $props();
 
   function handleEdit() {
-    
+    onEdit()    
   }
 
   function handleDelete() {
