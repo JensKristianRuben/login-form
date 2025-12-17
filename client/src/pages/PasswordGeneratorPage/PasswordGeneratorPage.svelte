@@ -7,12 +7,12 @@
   import { io } from "socket.io-client";
   import toastr from "toastr";
 
-
-  let password = $state("")
+  let password = $state("");
   let socket;
+  let strength = $state("");
+  let method = $state("standard");
 
   onMount(() => {
-
     socket = io("http://localhost:8080");
 
     socket.on("server-password", (newPassword) => {
@@ -26,7 +26,7 @@
 
     return () => socket.disconnect();
   });
-  
+
   function handleGenerateRandomThunderPassword() {
     password = "Loading...";
     socket.emit("get-external-password");
@@ -35,7 +35,7 @@
   function handleCopy() {
     if (password !== "" && password !== "Loading...") {
       navigator.clipboard.writeText(password);
-      toastr.succes("Password copied")
+      toastr.succes("Password copied");
     }
   }
 </script>
@@ -46,20 +46,42 @@
   <div class="password-generator-container">
     <div class="password-text-and-button-wrapper">
       <p>{password}</p>
-      <CopyIcon />
-      <GenerateIcon 
-      onclick={handleGenerateRandomThunderPassword}
-      />  
+      <CopyIcon onclick={handleCopy} />
+      <GenerateIcon onclick={handleGenerateRandomThunderPassword} />
     </div>
+    <div class="strength-bar-info">
+      <p>Strength</p>
+      <p id="strength-value">{strength} + 1</p>
+    </div>
+    <div class="strength-bar"></div>
   </div>
 
   <div class="generate-option-grid">
-    <div class="generate-option">1</div>
-    <div class="generate-option">2</div>
-    <div class="generate-option">3</div>
-    <div class="generate-option">4</div>
-    <div class="generate-option">5</div>
-    <div class="generate-option">6</div>
+    <button class="generate-option {method === 'standard' ? 'selected' : ''}"onclick={() => (method = "standard")}>
+      <h3>Thunder Random</h3>
+      <p>Computers fake it, nature doesn't.</p>
+    </button>
+    <button class="generate-option {method === 'random-thunder' ? 'selected' : ''}"onclick={() => (method = "random-thunder")}>
+      <h3>Thunder Random</h3>
+      <p>Computers fake it, nature doesn't.</p>
+    </button>
+    <button class="generate-option {method === '3' ? 'selected' : ''}"onclick={() => (method = "3")}>
+      <h3>3</h3>
+      <p></p>
+    </button>
+    <button class="generate-option {method === '4' ? 'selected' : ''}"onclick={() => (method = "4")}>
+      <h3>4</h3>
+      <p></p>
+    </button>
+    <button class="generate-option {method === '5' ? 'selected' : ''}"onclick={() => (method = "5")}>
+      <h3>5</h3>
+      <p></p>
+    </button>
+    <button class="generate-option {method === '6' ? 'selected' : ''}"onclick={() => (method = "6")}>
+      <h3>6</h3>
+      <p></p>
+    </button>
+    
   </div>
 </main>
 
@@ -107,6 +129,26 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     cursor: pointer;
+  }
+
+  .selected {
+    border: 2px solid #00ff80;
+    background-color: rgba(0, 255, 128, 0.1);
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 255, 128, 0.2);
+  }
+
+  .strength-bar-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  #strength-value {
+    display: flex;
+    justify-content: flex-end;
   }
 </style>

@@ -1,6 +1,7 @@
 <script>
   import { scale } from "svelte/transition";
   import toastr from "toastr";
+  let { onclick } = $props();
 
   let isCopied = $state();
 
@@ -8,11 +9,12 @@
     if (isCopied) return;
 
     isCopied = true;
-    toastr.success("Password copied")
+    toastr.success("Password copied");
 
     setTimeout(() => {
       isCopied = false;
     }, 2000);
+    onclick?.();
   }
 </script>
 
@@ -54,12 +56,10 @@
 </button>
 
 <style>
-
   .copy {
     color: white;
     transition: color 0.2s;
   }
-
 
   .check {
     color: #00ff80;
