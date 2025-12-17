@@ -39,13 +39,13 @@
       .map((num) => charset[num % charset.length])
       .join("");
   }
-
+  
   async function decryptPassword(masterKey, encryptedPayload) {
     try {
       const parts = encryptedPayload.split(":");
       if (parts.length !== 3) {
         console.error(
-          "Payload format er forkert. Skal være salt:iv:ciphertext"
+          "Payload format wrong - must be salt:iv:ciphertext"
         );
         return null;
       }

@@ -56,6 +56,10 @@
 </button>
 
 <style>
+  button {
+    margin: 10px;
+  }
+
   .copy {
     color: white;
     transition: color 0.2s;

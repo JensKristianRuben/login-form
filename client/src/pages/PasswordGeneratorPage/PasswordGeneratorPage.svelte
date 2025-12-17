@@ -2,6 +2,7 @@
   import Sidebar from "../../components/sidebar.svelte";
   import GenerateIcon from "../../components/icons/GenerateIcon.svelte";
   import CopyIcon from "../../components/icons/CopyIcon.svelte";
+  import {generateStandardPassword} from './generatingMethods.js'
 
   import { onMount } from "svelte";
   import { io } from "socket.io-client";
@@ -9,7 +10,8 @@
 
   let password = $state("");
   let socket;
-  let strength = $state(4);
+  let strength = $state(1);
+  let passwordLength = $state(20);
   let strengthText = $derived(() => {
     if (strength === 1) return "WEAK";
     if (strength === 2) return "FAIR";
@@ -43,11 +45,12 @@
 
   function chooseMethod() {
     if (method === "standard") {
-      console.log("standard");
+      password = generateStandardPassword(passwordLength);
     }
     if (method === "random-thunder") {
       password = "Loading...";
       socket.emit("get-external-password");
+      strength = 2;
     }
   }
 </script>
@@ -134,15 +137,25 @@
     color: white;
   }
   .password-generator-container {
-    width: 500px;
+    width: 700px;
     border: 1px solid #6fbd96;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 255, 128, 0.2);
     background-color: #001a0d;
+    padding: 20px;
   }
 
   .password-text-and-button-wrapper {
     display: flex;
     flex-direction: row;
     width: 100%;
+  }
+
+  .password-text-and-button-wrapper p {
+    background-color: #063e22;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0, 255, 128, 0.2);
+    border-radius: 10px;
   }
 
   .generate-option-grid {
@@ -184,7 +197,6 @@
   .strength-bar {
     height: 15px;
     flex-grow: 1;
-    border: 2px solid white;
     background-color: transparent;
     transition: all 0.3s ease;
     display: flex;
@@ -194,9 +206,8 @@
   .bar {
     height: 10px;
     flex-grow: 1;
-    border: 2px solid white;
     background-color: transparent;
-    transition: all 0.3s ease;
+    transition: all 0.7 ease-in-out;
   }
   .level-1 {
     background-color: #f64a4a;

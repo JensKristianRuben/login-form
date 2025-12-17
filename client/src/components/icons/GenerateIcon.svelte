@@ -38,6 +38,9 @@
 </button>
 
 <style>
+  button {
+    margin: 10px;
+  }
   svg {
     color: white;
     transform-origin: center;
