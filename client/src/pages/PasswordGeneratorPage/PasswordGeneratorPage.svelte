@@ -9,7 +9,14 @@
 
   let password = $state("");
   let socket;
-  let strength = $state("");
+  let strength = $state(4);
+  let strengthText = $derived(() => {
+    if (strength === 1) return "WEAK";
+    if (strength === 2) return "FAIR";
+    if (strength === 3) return "GOOD";
+    if (strength === 4) return "STRONG";
+    return "";
+  });
   let method = $state("standard");
 
   onMount(() => {
@@ -27,15 +34,20 @@
     return () => socket.disconnect();
   });
 
-  function handleGenerateRandomThunderPassword() {
-    password = "Loading...";
-    socket.emit("get-external-password");
-  }
-
   function handleCopy() {
     if (password !== "" && password !== "Loading...") {
       navigator.clipboard.writeText(password);
       toastr.succes("Password copied");
+    }
+  }
+
+  function chooseMethod() {
+    if (method === "standard") {
+      console.log("standard");
+    }
+    if (method === "random-thunder") {
+      password = "Loading...";
+      socket.emit("get-external-password");
     }
   }
 </script>
@@ -47,41 +59,63 @@
     <div class="password-text-and-button-wrapper">
       <p>{password}</p>
       <CopyIcon onclick={handleCopy} />
-      <GenerateIcon onclick={handleGenerateRandomThunderPassword} />
+      <GenerateIcon onclick={chooseMethod} />
     </div>
     <div class="strength-bar-info">
       <p>Strength</p>
-      <p id="strength-value">{strength} + 1</p>
+      <p id="strength-value">{strengthText()}</p>
     </div>
-    <div class="strength-bar"></div>
+    <div class="strength-bar">
+      <div class="bar {strength >= 1 ? 'level-' + strength : ''}"></div>
+      <div class="bar {strength >= 2 ? 'level-' + strength : ''}"></div>
+      <div class="bar {strength >= 3 ? 'level-' + strength : ''}"></div>
+      <div class="bar {strength >= 4 ? 'level-' + strength : ''}"></div>
+    </div>
   </div>
 
   <div class="generate-option-grid">
-    <button class="generate-option {method === 'standard' ? 'selected' : ''}"onclick={() => (method = "standard")}>
+    <button
+      class="generate-option {method === 'standard' ? 'selected' : ''}"
+      onclick={() => (method = "standard")}
+    >
+      <h3>Standard randomness</h3>
+      <p>Kinda fake randomness</p>
+    </button>
+    <button
+      class="generate-option {method === 'random-thunder' ? 'selected' : ''}"
+      onclick={() => (method = "random-thunder")}
+    >
       <h3>Thunder Random</h3>
       <p>Computers fake it, nature doesn't.</p>
     </button>
-    <button class="generate-option {method === 'random-thunder' ? 'selected' : ''}"onclick={() => (method = "random-thunder")}>
-      <h3>Thunder Random</h3>
-      <p>Computers fake it, nature doesn't.</p>
-    </button>
-    <button class="generate-option {method === '3' ? 'selected' : ''}"onclick={() => (method = "3")}>
+    <button
+      class="generate-option {method === '3' ? 'selected' : ''}"
+      onclick={() => (method = "3")}
+    >
       <h3>3</h3>
       <p></p>
     </button>
-    <button class="generate-option {method === '4' ? 'selected' : ''}"onclick={() => (method = "4")}>
+    <button
+      class="generate-option {method === '4' ? 'selected' : ''}"
+      onclick={() => (method = "4")}
+    >
       <h3>4</h3>
       <p></p>
     </button>
-    <button class="generate-option {method === '5' ? 'selected' : ''}"onclick={() => (method = "5")}>
+    <button
+      class="generate-option {method === '5' ? 'selected' : ''}"
+      onclick={() => (method = "5")}
+    >
       <h3>5</h3>
       <p></p>
     </button>
-    <button class="generate-option {method === '6' ? 'selected' : ''}"onclick={() => (method = "6")}>
+    <button
+      class="generate-option {method === '6' ? 'selected' : ''}"
+      onclick={() => (method = "6")}
+    >
       <h3>6</h3>
       <p></p>
     </button>
-    
   </div>
 </main>
 
@@ -147,8 +181,49 @@
     justify-content: space-around;
   }
 
+  .strength-bar {
+    height: 15px;
+    flex-grow: 1;
+    border: 2px solid white;
+    background-color: transparent;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .bar {
+    height: 10px;
+    flex-grow: 1;
+    border: 2px solid white;
+    background-color: transparent;
+    transition: all 0.3s ease;
+  }
+  .level-1 {
+    background-color: #f64a4a;
+    border-color: #f64a4a;
+  }
+
+  .level-2 {
+    background-color: #fb7c58;
+    border-color: #fb7c58;
+  }
+
+  .level-3 {
+    background-color: #f8cd65;
+    border-color: #f8cd65;
+  }
+
+  .level-4 {
+    background-color: #00ff80;
+    border-color: #00ff80;
+    box-shadow: 0 0 10px rgba(0, 255, 128, 0.4);
+  }
+
   #strength-value {
     display: flex;
     justify-content: flex-end;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
   }
 </style>
