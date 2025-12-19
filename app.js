@@ -23,6 +23,7 @@ import generatePassword from './sockets/generatePasswordSockets.js'
 
 
 // 5. Første gang man logger ind skal man skrive sit masterpassword
+// Sikkerhedsoverblik - genbrugtepasswords
 
 
 // Todo: find ud af hvorfor den går direkte til /activation når man først logger på.
