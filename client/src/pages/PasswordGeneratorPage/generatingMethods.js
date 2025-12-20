@@ -11,3 +11,18 @@ export function generateStandardPassword(length) {
   
   return result;
 }
+
+export function calculateStrength(password) {
+    let score = 0;
+    if (password.length >= 12) score++;
+    if (password.length >= 16) score++;
+    if (/[a-z]/.test(password)) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+
+    if (score <= 2) return 1;
+    if (score === 3) return 2;
+    if (score === 4) return 3;
+    return 4;
+  }

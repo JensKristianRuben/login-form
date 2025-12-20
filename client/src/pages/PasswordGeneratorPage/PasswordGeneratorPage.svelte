@@ -2,7 +2,10 @@
   import Sidebar from "../../components/sidebar.svelte";
   import GenerateIcon from "../../components/icons/GenerateIcon.svelte";
   import CopyIcon from "../../components/icons/CopyIcon.svelte";
-  import {generateStandardPassword} from './generatingMethods.js'
+  import {
+    generateStandardPassword,
+    calculateStrength,
+  } from "./generatingMethods.js";
 
   import { onMount } from "svelte";
   import { io } from "socket.io-client";
@@ -10,8 +13,8 @@
 
   let password = $state("");
   let socket;
-  let strength = $state(1);
-  let passwordLength = $state(20);
+  let strength = $state(0);
+  let passwordLength = $state(8);
   let strengthText = $derived(() => {
     if (strength === 1) return "WEAK";
     if (strength === 2) return "FAIR";
@@ -20,7 +23,28 @@
     return "";
   });
   let method = $state("standard");
+  $effect(() => {
+    if (password && password !== "Loading..." && password !== "ERROR") {
+      strength = calculateStrength(password);
+    }
+  });
 
+  function handleSliderChange() {
+    if (method === "standard") {
+      password = generateStandardPassword(passwordLength);
+    }
+
+    if (method === "random-thunder") {
+      clearTimeout(debounceTimer);
+
+      if (password !== "...") password = "...";
+      debounceTimer = setTimeout(() => {
+        socket.emit("get-external-password", {
+          length: passwordLength,
+        });
+      }, 500);
+    }
+  }
   onMount(() => {
     socket = io("http://localhost:8080");
 
@@ -43,14 +67,21 @@
     }
   }
 
+  let debounceTimer;
   function chooseMethod() {
     if (method === "standard") {
       password = generateStandardPassword(passwordLength);
+      strength = calculateStrength(password);
     }
     if (method === "random-thunder") {
-      password = "Loading...";
-      socket.emit("get-external-password");
-      strength = 2;
+      clearTimeout(debounceTimer);
+
+      if (password !== "...") password = "...";
+      debounceTimer = setTimeout(() => {
+        socket.emit("get-external-password", {
+          length: passwordLength,
+        });
+      }, 500);
     }
   }
 </script>
@@ -76,6 +107,21 @@
     </div>
   </div>
 
+  <div class="password-length-container">
+    <label for="passwordLength" class="password-lengt-label"
+      >Password Length: {passwordLength}</label
+    >
+    <input
+      type="range"
+      name="passwordLength"
+      id="passwordLength"
+      class="password-length-slider"
+      min="8"
+      max="32"
+      bind:value={passwordLength}
+      oninput={handleSliderChange}
+    />
+  </div>
   <div class="generate-option-grid">
     <button
       class="generate-option {method === 'standard' ? 'selected' : ''}"
@@ -96,27 +142,6 @@
       onclick={() => (method = "3")}
     >
       <h3>3</h3>
-      <p></p>
-    </button>
-    <button
-      class="generate-option {method === '4' ? 'selected' : ''}"
-      onclick={() => (method = "4")}
-    >
-      <h3>4</h3>
-      <p></p>
-    </button>
-    <button
-      class="generate-option {method === '5' ? 'selected' : ''}"
-      onclick={() => (method = "5")}
-    >
-      <h3>5</h3>
-      <p></p>
-    </button>
-    <button
-      class="generate-option {method === '6' ? 'selected' : ''}"
-      onclick={() => (method = "6")}
-    >
-      <h3>6</h3>
       <p></p>
     </button>
   </div>
@@ -207,21 +232,28 @@
     height: 10px;
     flex-grow: 1;
     background-color: transparent;
-    transition: all 0.7 ease-in-out;
+
+    transition:
+      background-color 0.3s ease-in-out,
+      border-color 0.3s ease-in-out,
+      box-shadow 0.3s ease;
   }
   .level-1 {
     background-color: #f64a4a;
     border-color: #f64a4a;
+    box-shadow: 0 0 10px rgba(246, 74, 74, 0.4);
   }
 
   .level-2 {
     background-color: #fb7c58;
     border-color: #fb7c58;
+    box-shadow: 0 0 10px rgba(251, 124, 88, 0.4);
   }
 
   .level-3 {
     background-color: #f8cd65;
     border-color: #f8cd65;
+    box-shadow: 0 0 10px rgba(248, 205, 101, 0.4);
   }
 
   .level-4 {
@@ -236,5 +268,48 @@
     color: white;
     font-weight: bold;
     font-size: 1rem;
+  }
+
+  .password-length-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .password-lengt-label {
+    width: 600px;
+    margin-top: 20px;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 700;
+    font-family: "Montserrat", sans-serif;
+  }
+
+  .password-length-slider {
+    -webkit-appearance: none;
+    width: 600px;
+    margin-top: 10px;
+    background-color: #063e22;
+  }
+  .password-length-slider::-webkit-slider-runnable-track {
+    height: 6px;
+    background: #063e22;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .password-length-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    margin-top: -7px;
+    width: 20px;
+    height: 20px;
+    background: #00ff80;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(0, 255, 128, 0.6);
+  }
+
+  .password-length-slider:hover::-webkit-slider-thumb {
+    box-shadow: 0 0 12px rgba(0, 255, 128, 0.9);
   }
 </style>

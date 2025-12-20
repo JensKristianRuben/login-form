@@ -1,7 +1,10 @@
 export default (io, socket) => {
-    socket.on("get-external-password", async () => {
+    socket.on("get-external-password", async ({ length }) => {
         try {
-            const response = await fetch("https://www.random.org/strings/?num=1&len=20&digits=on&upper=on&lower=on&unique=on&format=plain&rnd=new");
+            if (length > 32) {  
+                return socket.emit("server-error", "Length exceeds maximum of 32");
+            }
+            const response = await fetch(`https://www.random.org/strings/?num=1&len=${length}&digits=on&upper=on&lower=on&unique=on&format=plain&rnd=new`);
             if (response.ok) {
                 const password = await response.text();
                 socket.emit("server-password", password.trim());
@@ -14,3 +17,4 @@ export default (io, socket) => {
         }
     });
 };
+

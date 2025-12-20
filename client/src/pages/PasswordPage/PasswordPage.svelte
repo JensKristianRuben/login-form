@@ -5,11 +5,10 @@
   import MasterPasswordModal from "../../components/passwordPage/MasterPasswordModal.svelte";
   import ConfirmModal from "../../components/passwordPage/ConfirmModal.svelte";
   import EditPasswordModal from "../../components/passwordPage/EditPasswordModal.svelte";
-//  import { deriveKey, decryptPassword, handleMasterPasswordVerification } from "./passwordPage.js";
+  import { decryptPassword } from "./passwordPage.js";
   import { flip } from "svelte/animate";
   import { fly, fade } from "svelte/transition";
   import { onMount } from "svelte";
-  import CryptoJS from "crypto-js";
   import toastr from "toastr";
 
   let passwordToDecrypt = $state(null);
@@ -69,8 +68,8 @@
   }
 
   let isCreatePasswordModalOpen = $state(false);
-  let isMasterPasswordModalOpen = $state(false); //TODO:
-  let isConfirmModalOpen = $state(false); //TODO:
+  let isMasterPasswordModalOpen = $state(false);
+  let isConfirmModalOpen = $state(false);
 
   function closeMasterPasswordModal() {
     isMasterPasswordModalOpen = false;
@@ -82,9 +81,6 @@
 
     isMasterPasswordModalOpen = true;
   }
-
- 
-
 
   function closeConfirmModal() {
     isConfirmModalOpen = false;
@@ -116,48 +112,12 @@
           decryptedPasswords = tempPasswords;
         }, 5000);
       } catch (error) {
-        console.error("Fejl under dekryptering/kryptering:", error);
+        console.error("Error while decrypting the password:", error);
       }
 
       passwordToDecrypt = null;
       selectedPasswordId = null;
     }
-  }
-
-  // __________________DEKRYPTERING____________________
-  async function deriveKey(masterKey, salt) {
-    return await CryptoJS.PBKDF2(masterKey, salt, {
-      keySize: 256 / 32,
-      iterations: 100000,
-    });
-  }
-
-  async function decryptPassword(masterKey, encryptedPayload) {
-    const parts = encryptedPayload.split(":");
-    if (parts.length !== 3) {
-      console.error("Payload is wrong - must be salt:iv:ciphertext");
-      return null;
-    }
-    const [saltBase64, ivBase64, ciphertextBase64] = parts;
-
-    const salt = CryptoJS.enc.Base64.parse(saltBase64);
-    const iv = CryptoJS.enc.Base64.parse(ivBase64);
-
-    const key = await deriveKey(masterKey, salt);
-
-    const encryptedData = CryptoJS.lib.CipherParams.create({
-      ciphertext: CryptoJS.enc.Base64.parse(ciphertextBase64),
-    });
-
-    const decryptedBytes = CryptoJS.AES.decrypt(encryptedData, key, {
-      iv: iv,
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.Pkcs7,
-    });
-
-    const originalText = decryptedBytes.toString(CryptoJS.enc.Utf8);
-
-    return originalText;
   }
 
   // ______________DELETE________________
@@ -257,7 +217,6 @@
     />
   </div>
 
-  <!-- TODO: send passwordet videre så det kan ses i kortet -->
   <div class="passwords-grid">
     {#each filteredPasswords as password (password.id)}
       <div
