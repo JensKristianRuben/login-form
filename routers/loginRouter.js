@@ -2,6 +2,7 @@ import { Router } from "express";
 import { comparePasswords } from "../util/passwordUtil.js";
 import supabase from "../util/supabaseClient.js";
 import { requireAuth } from '../util/authUtil.js'
+import { authenticator } from "otplib";
 
 const router = Router();
 
@@ -16,7 +17,7 @@ router.post("/api/login", async (req, res) => {
       .eq("email", email)
       .limit(1);
 
-      
+
     if (error) {
       console.error(error);
       return res.status(500).send({ error: "Database error" });
@@ -37,6 +38,14 @@ router.post("/api/login", async (req, res) => {
       return res.status(401).send({ error: "Invalid password" });
     }
 
+    if (user.two_factor_enabled) {
+      req.session.partialAuthId = user.id;
+      return res.send({
+        requires2FA: true,
+        message: "Please enter your 2FA code"
+      });
+    }
+
     req.session.userId = user.id;
 
     res.status(200).send({
@@ -44,11 +53,38 @@ router.post("/api/login", async (req, res) => {
         id: user.id,
         email: user.email,
         isActive: user.is_active,
+        requires2FA: false
       },
     });
   } catch (error) {
     res.status(500).send({ error: "Internal server error" });
   }
+});
+
+
+router.post("/api/login/verify-2fa", async (req, res) => {
+  const { token } = req.body;
+  const userId = req.session.partialAuthId;
+
+  if (!userId) return res.status(401).send({ error: "Session expired" });
+
+  const { data: user } = await supabase
+    .from("users")
+    .select("two_factor_secret")
+    .eq("id", userId)
+    .single();
+
+  const isValid = authenticator.verify({
+    token,
+    secret: user.two_factor_secret
+  });
+
+  if (!isValid) return res.status(400).send({ error: "Wrong code" });
+
+  req.session.userId = userId;
+  delete req.session.partialAuthId;
+
+  res.status(200).send({ data: "Login successful!" });
 });
 
 

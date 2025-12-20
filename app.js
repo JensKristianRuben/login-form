@@ -8,6 +8,7 @@ import logoutRouter from "./routers/logoutRouter.js";
 import sessionRouter from "./routers/sessionRouter.js";
 import passwordRouter from './routers/passwordsRouter.js'
 import activationPage from './routers/activationRouter.js';
+import twoFactorRouter from './routers/twoFactorRouter.js'
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import cors from "cors";
@@ -77,7 +78,8 @@ app.use(loginRouter);
 app.use(registerRouter);
 app.use(logoutRouter);
 app.use(sessionRouter);
-app.use(passwordRouter)
+app.use(passwordRouter);
+app.use(twoFactorRouter);
 app.use(activationPage);
  
 
