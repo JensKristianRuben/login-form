@@ -2,8 +2,10 @@
   import { navigate } from "svelte-routing";
   import { onMount } from "svelte";
   import { user, redirectAfterLogin } from "../../stores/clientAuth.js";
+  import TwoFactorAuthModal from "../../components/LoginAndRegisterPage/TwoFactorAuthModal.svelte";
 
-  export let mode;
+  let mode = $state("login");
+  let isTwoFactorAuthModalOpen = $state(false)
 
   function goToLogin() {
     mode = "login";
@@ -15,12 +17,10 @@
     navigate("/#register");
   }
 
-  $: document.title = getTitle(mode);
-
-  function getTitle(mode) {
-    if (mode === "register") return "Awayinvault - Sign Up";
-    return "Awayinvault - Sign in";
-  }
+  $effect(() => {
+    if (mode === "register") document.title = "Awayinvault - Sign Up";
+    else document.title = "Awayinvault - Sign in";
+  });
 
   onMount(() => {
     const hash = window.location.hash.slice(1);
@@ -95,6 +95,10 @@
     }
   }
 </script>
+
+
+<TwoFactorAuthModal
+class = {isTwoFactorAuthModalOpen ? "is-open" : ""} />
 
 <main
   class="login-and-register-main-container"

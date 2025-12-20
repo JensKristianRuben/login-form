@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { comparePasswords } from "../util/passwordUtil.js";
 import supabase from "../util/supabaseClient.js";
-import { requireAuth } from '../util/authUtil.js'
 import { authenticator } from "otplib";
 
 const router = Router();
