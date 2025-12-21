@@ -13,9 +13,9 @@
     });
   }
 
-  function handleModalClick(event) {
-    event.stopPropagation();
-  }
+    function handleModalClick(event) {
+      event.stopPropagation();
+    }
 
   function handleKeydown(event) {
     if (event.key === "Escape") {

@@ -1,8 +1,32 @@
 <script>
-    let { class: className } = $props();
+    let { class: className, onClose } = $props();
+
+    function handleModalClick(event) {
+        event.stopPropagation();
+    }
+
+    function handleKeydown(event) {
+        if (event.key === "Escape") {
+            onClose?.();
+        }
+    }
 </script>
 
-<div class="backlay {className}"></div>
+<div
+    class="backlay {className}"
+    onclick={onClose}
+    onkeydown={handleKeydown}
+    role="button"
+    tabindex="0"
+>
+    <div
+        class="twoFA-modal"
+        onclick={handleModalClick}
+        onkeydown={handleKeydown}
+        role="button"
+        tabindex="0"
+    ></div>
+</div>
 
 <style>
     .backlay {
@@ -26,5 +50,11 @@
     .backlay.is-open {
         opacity: 1;
         visibility: visible;
+    }
+
+    .twoFA-modal {
+        width: 700px;
+        height: 300px;
+        border: 1px solid rgb(255, 244, 244);
     }
 </style>

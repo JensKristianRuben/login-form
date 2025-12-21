@@ -33,7 +33,7 @@
   let shakeForm = false;
 
 
-  
+
 
   async function handleLogin(event) {
     event.preventDefault();
@@ -50,6 +50,12 @@
 
     if (response.status === 200) {
       const result = await response.json();
+
+      if (result.requires2FA) {
+            isTwoFactorAuthModalOpen = true;
+            return;
+        }
+
       user.set(result.data);
       navigate("/passwords");
       if ($redirectAfterLogin) {
@@ -101,7 +107,8 @@
 
 
 <TwoFactorAuthModal
-class = {isTwoFactorAuthModalOpen ? "is-open" : ""} />
+class = {isTwoFactorAuthModalOpen ? "is-open" : ""}
+onClose = {() => isTwoFactorAuthModalOpen = false} />
 
 <main
   class="login-and-register-main-container"
