@@ -32,9 +32,6 @@
   let password = "123456789";
   let shakeForm = false;
 
-
-
-
   async function handleLogin(event) {
     event.preventDefault();
 
@@ -50,6 +47,8 @@
 
     if (response.status === 200) {
       const result = await response.json();
+
+      if (user)
 
       if (result.requires2FA) {
             isTwoFactorAuthModalOpen = true;

@@ -34,11 +34,7 @@
         }
       );
 
-      // TODO:  Tilføj loader her for det visuelle imens requesten arbejder.
-
       const result = await response.json();
-
-      console.log(result);
 
       navigate("/passwords");
     }
