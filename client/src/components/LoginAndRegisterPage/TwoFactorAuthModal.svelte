@@ -194,7 +194,6 @@
 
   .otp-input-box:focus {
     outline: none;
-
     border: 2px solid #6fbd96;
   }
 </style>

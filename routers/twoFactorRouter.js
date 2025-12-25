@@ -21,7 +21,7 @@ router.post("/api/setup-2fa", async (req, res) => {
 
     const secret = authenticator.generateSecret();
 
-    const otpauth = authenticator.keyuri(user.email, "Arbezzebra (Local)", secret);
+    const otpauth = authenticator.keyuri(user.email, "AwayInVault (Local)", secret);
 
     const imageUrl = await qrcode.toDataURL(otpauth);
 
