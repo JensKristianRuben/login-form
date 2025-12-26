@@ -49,14 +49,15 @@
 <Router>
   <Route path="/">
     <LoginAndRegisterPage
-      {mode}
+    {mode}
       on:goLogin={goToLogin}
       on:goRegister={goToRegister}
     />
   </Route>
 
+
+  <Route path="/activation"><ActivationPage /></Route>
   <PrivateRouteGuard path="/passwords" component={PasswordPage} />
-  <PrivateRouteGuard path="/activation" component={ActivationPage} />
   <PrivateRouteGuard path="/generator" component={PasswordGeneratorPage} />
   <PrivateRouteGuard path="/rapport" component={SecurityRapportPage} />
   <PrivateRouteGuard path="/twofactorauthentication" component={TwofactorAuthentication}/>

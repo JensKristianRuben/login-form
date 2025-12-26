@@ -25,7 +25,7 @@ router.post("/api/setup-2fa", async (req, res) => {
 
     const imageUrl = await qrcode.toDataURL(otpauth);
 
-    res.status(200).send({ Secret: secret, qrcode: imageUrl })
+    res.status(200).send({ secret: secret, qrcode: imageUrl })
 })
 
 router.post("/api/verify", async (req, res) => {

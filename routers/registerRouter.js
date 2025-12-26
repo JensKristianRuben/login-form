@@ -36,7 +36,7 @@ router.post("/api/register", async (req, res) => {
       return res.status(500).send({ error: "Could not create user" });
     }
 
-    const activationLink = `https://arbezzebra.dk/activation?token=${activationToken}`;
+    const activationLink = `http://localhost:5173/activation?token=${activationToken}`;
 
     const { error: mailError } = await resend.emails.send({
       from: "noreply@arbezzebra.dk",

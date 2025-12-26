@@ -97,6 +97,7 @@
 
     if (response.ok) {
       navigate("/#login");
+      window.location.reload();
     } else {
       console.error("Registration failed");
     }

@@ -19,9 +19,9 @@
     });
     if (response.ok) {
       const result = await response.json();
-
+      
       qrcode = result.qrcode;
-      secretCode = result.secretCode;
+      secretCode = result.secret;
 
       setTimeout(() => {
         qrCodeSection.scrollIntoView({ behavior: "smooth" });
@@ -35,6 +35,7 @@
     setTimeout(() => {
       sixDigitCodeSection.scrollIntoView({ behavior: "smooth" });
     }, 100);
+    setTimeout(() => inputFeilds[0].focus(), 50);
   }
 
   function handleInputKeydown(event, index) {
@@ -45,7 +46,7 @@
     }
   }
 
-  function handleInput(event, index) {
+  async function handleInput(event, index) {
     const value = event.target.value;
     if (value.length === 1) {
       if (index < 5) {
@@ -54,6 +55,23 @@
     }
 
     const fullCode = otpValue.join("");
+
+    if (fullCode.length === 6) {
+      const response = await fetch("http://localhost:8080/api/verify", {
+        method: "POST",
+        credentials: "include",
+        headers: {"Content-Type": "Application/json"},
+        body: JSON.stringify({token: fullCode, secret: secretCode})
+      });
+      
+      if(response.ok) {
+          const result = await response.json()
+
+          toastr.success("Two Factor authentication enabled. Enjoy. ")
+
+      }
+    }
+
   }
 </script>
 
@@ -220,7 +238,7 @@
   }
   .input-feilds-wrapper {
     display: flex;
-    flex-direction: row;    
+    flex-direction: row;
     gap: 20px;
     margin: 50px;
   }
