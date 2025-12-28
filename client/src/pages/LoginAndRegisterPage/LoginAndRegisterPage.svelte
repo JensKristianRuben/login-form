@@ -53,7 +53,7 @@
         isTwoFactorAuthModalOpen = true;
         return;
       }
-
+      
       user.set(result.data);
       navigate("/passwords");
       if ($redirectAfterLogin) {

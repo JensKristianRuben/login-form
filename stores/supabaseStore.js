@@ -27,8 +27,6 @@ class SupabaseStore extends session.Store {
         expire,
       });
 
-      console.log("SET SESS TYPE:", typeof sess);
-
       callback(error || null);
     } catch (err) {
       callback(err);

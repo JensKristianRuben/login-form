@@ -1,5 +1,7 @@
 <script>
   import { navigate } from "svelte-routing";
+  import { user } from "../../stores/clientAuth";
+  import toastr from "toastr";
 
   let { class: className, onClose } = $props();
   let otpValue = $state(["", "", "", "", "", ""]);
@@ -34,9 +36,21 @@
         }
       );
 
-      const result = await response.json();
+        if (!response.ok) {
+          toastr.error("Wrong one time password")
+          otpValue = ["", "", "", "", "", ""];
+          inputFeilds[0]?.focus();
+        }
 
-      navigate("/passwords");
+      if (response.ok) {
+        const result = await response.json();
+        user.set(result.data);
+        console.log($user);
+        toastr.success("Logged in")
+        navigate("/passwords");
+      }
+
+      
     }
   }
 

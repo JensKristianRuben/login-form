@@ -1,6 +1,8 @@
 <script>
+  import { onMount } from "svelte";
   import Sidebar from "../../components/sidebar.svelte";
   import toastr from "toastr";
+  import { user } from "../../stores/clientAuth";
 
   let qrcode = $state("");
   let secretCode = $state("");
@@ -8,6 +10,13 @@
   let inputFeilds = [];
   let qrCodeSection;
   let sixDigitCodeSection;
+
+
+  $effect(() => {
+    if ($user.twoFactorEnabled) {
+        
+    }
+  });
 
   async function handleSetUp2FA() {
     const response = await fetch("http://localhost:8080/api/setup-2fa", {
@@ -19,7 +28,7 @@
     });
     if (response.ok) {
       const result = await response.json();
-      
+
       qrcode = result.qrcode;
       secretCode = result.secret;
 
@@ -60,24 +69,24 @@
       const response = await fetch("http://localhost:8080/api/verify", {
         method: "POST",
         credentials: "include",
-        headers: {"Content-Type": "Application/json"},
-        body: JSON.stringify({token: fullCode, secret: secretCode})
+        headers: { "Content-Type": "Application/json" },
+        body: JSON.stringify({ token: fullCode, secret: secretCode }),
       });
-      
-      if(response.ok) {
-          const result = await response.json()
 
-          toastr.success("Two Factor authentication enabled. Enjoy. ")
+      if (response.ok) {
+        const result = await response.json();
 
+        toastr.success("Two Factor authentication enabled. Enjoy. ");
       }
     }
-
   }
 </script>
 
 <Sidebar />
 
-<main>
+{#if !$user.twoFactorEnabled}
+    <main>
+
   <h1>Start Two Factor <br /> Authentication now</h1>
   <h3>
     We use Microsoft Authenticator for added security. It’s quick, safe, and
@@ -165,6 +174,14 @@
     />
   </div>
 </section>
+{:else }
+<main>
+    <h1>Account Secured!</h1>
+    <h3>2FA is successfully enabled. Your data is now much better protected against unauthorized access.</h3>
+</main>
+
+{/if}
+
 
 <style>
   main {

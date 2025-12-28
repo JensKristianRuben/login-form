@@ -10,6 +10,7 @@ router.get("/api/session", (req, res) => {
   res.status(200).json({
     user: {
       id: req.session.userId,
+      twoFactorEnabled: req.session.twoFactorEnabled,
     }
   });
 });
