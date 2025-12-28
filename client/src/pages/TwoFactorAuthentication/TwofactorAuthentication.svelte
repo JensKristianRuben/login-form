@@ -3,6 +3,7 @@
   import Sidebar from "../../components/sidebar.svelte";
   import toastr from "toastr";
   import { user } from "../../stores/clientAuth";
+  import SheildIcon from "../../components/icons/SheildIcon.svelte";
 
   let qrcode = $state("");
   let secretCode = $state("");
@@ -178,6 +179,7 @@
 <main>
     <h1>Account Secured!</h1>
     <h3>2FA is successfully enabled. Your data is now much better protected against unauthorized access.</h3>
+    <SheildIcon/>
 </main>
 
 {/if}
