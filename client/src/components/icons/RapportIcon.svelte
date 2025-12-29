@@ -22,6 +22,5 @@
 <style>
   svg {
     color: #6fbd96;
-    margin-left: auto
   }
 </style>

@@ -4,6 +4,7 @@
   import WandIcon from "./icons/WandIcon.svelte";
   import SheildNavIcon from "./icons/SheildNavIcon.svelte";
   import RapportIcon from "./icons/RapportIcon.svelte";
+  import LogoutIcon from "./icons/LogoutIcon.svelte";
   import toastr from "toastr";
 
   async function logout() {
@@ -27,8 +28,8 @@
     <a href="/generator" class="menu-link">Password generator <WandIcon /> </a>
     <a href="/twofactorauthentication" class="menu-link">Two Factor Authentication <SheildNavIcon/></a>
     <a href="/rapport" class="menu-link">Security rapport <RapportIcon /> </a>
-    <button class="logout-button" id="logoutButton" onclick={logout}
-      >Logout</button
+    <button class="logout-button" id="logoutButton" onclick={logout} 
+      >Logout <LogoutIcon/></button
     >
   </div>
 </nav>
@@ -59,9 +60,9 @@
   }
 
   .logo {
-    height: 50px;
-    width: 50px;
-    margin: 0 auto;
+    height: 100px;
+    width: 100px;
+    margin: 50px auto;
   }
 
   .menu-link {
@@ -86,8 +87,9 @@
   }
 
   .logout-button {
-    padding: 12px 20px;
-    font-size: 15px;
+    padding: 20px 10px 20px 20px;
+    font-size: 12px;
+    font-family: "Montserrat";
     color: #ffb3b3;
     background: transparent;
     border: none;
@@ -98,6 +100,9 @@
       background 0.2s,
       padding-left 0.2s;
     margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+
   }
 
   .logout-button:hover {

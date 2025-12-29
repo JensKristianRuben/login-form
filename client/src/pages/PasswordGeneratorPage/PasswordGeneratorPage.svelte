@@ -89,6 +89,7 @@
 <Sidebar />
 
 <main>
+  <h1>Password Generator</h1>
   <div class="password-generator-container">
     <div class="password-text-and-button-wrapper">
       <p>{password}</p>
@@ -160,6 +161,10 @@
     padding: 20px;
     margin: 0;
     color: white;
+  }
+
+  h3 {
+    margin: 0;
   }
   .password-generator-container {
     width: 700px;
