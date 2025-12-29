@@ -1,5 +1,10 @@
 <script>
   import { navigate } from "svelte-routing";
+  import KeyIcon from "./icons/KeyIcon.svelte";
+  import WandIcon from "./icons/WandIcon.svelte";
+  import SheildNavIcon from "./icons/SheildNavIcon.svelte";
+  import RapportIcon from "./icons/RapportIcon.svelte";
+  import toastr from "toastr";
 
   async function logout() {
     const response = await fetch("http://localhost:8080/api/logout", {
@@ -8,7 +13,7 @@
     });
 
     if (!response.ok) {
-      console.log("Logout failed");
+      toastr.error("Failed to logout");
       return;
     }
     navigate("/");
@@ -18,11 +23,11 @@
 <nav class="navigation-bar">
   <div class="side-dropdown">
     <img src="./a-way-in.png" alt="awayinvault logo" class="logo" />
-    <a href="/passwords" class="menu-link">passwords</a>
-    <a href="/generator" class="menu-link">Password generator</a>
-    <a href="/twofactorauthentication" class="menu-link">Two Factor Authentication</a>
-    <a href="/rapport" class="menu-link">Security rapport</a>
-    <button class="logout-button" id="logoutButton" on:click={logout}
+    <a href="/passwords" class="menu-link">passwords <KeyIcon /></a>
+    <a href="/generator" class="menu-link">Password generator <WandIcon /> </a>
+    <a href="/twofactorauthentication" class="menu-link">Two Factor Authentication <SheildNavIcon/></a>
+    <a href="/rapport" class="menu-link">Security rapport <RapportIcon /> </a>
+    <button class="logout-button" id="logoutButton" onclick={logout}
       >Logout</button
     >
   </div>
@@ -60,7 +65,7 @@
   }
 
   .menu-link {
-    padding: 12px 20px;
+    padding: 20px 10px 20px 20px;
     color: #e8f5e9;
     text-decoration: none;
     font-size: 15px;
@@ -68,6 +73,9 @@
     transition:
       background 0.2s,
       padding-left 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .menu-link:hover {
