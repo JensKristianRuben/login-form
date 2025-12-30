@@ -39,7 +39,7 @@ const app = express();
 
 const server = http.createServer(app);
 
-const allowedOrigins = ["https://arbezzebra.dk", "https://www.arbezzebra.dk", "http://localhost:5173"];
+const allowedOrigins = ["https://arbezzebra.dk", "https://www.arbezzebra.dk", "http://localhost:5173", "http://localhost:5174"];
 
 
 const __filename = fileURLToPath(import.meta.url);

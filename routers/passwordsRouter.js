@@ -1,6 +1,7 @@
 import { Router } from "express";
 import supabase from "../util/supabaseClient.js";
 import { requireAuth } from "../util/authUtil.js";
+import { log } from "console";
 
 const router = Router();
 
@@ -24,6 +25,31 @@ router.get("/api/passwords", requireAuth, async (req, res) => {
     res.status(500).send({ error: "Internal server error" });
   }
 });
+
+router.get("/api/passwords/count", requireAuth, async (req, res) => {
+
+  const userId = req.user.id;
+
+  try {
+    const { count, error } = await supabase
+      .from("passwords")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", userId);
+
+    if (error) {
+      console.error("Couldnt read passwords:", error.message);
+      return res.status(500).send({ error: "Database error" });
+    }
+
+    console.log(count);
+    
+    return res.status(200).send({ count })
+
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).send({ error: "Internal server error" });
+  }
+})
 
 router.post("/api/passwords", requireAuth, async (req, res) => {
   const { website, username, encryptedPassword } = req.body;
