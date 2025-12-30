@@ -233,11 +233,6 @@
 
 <style>
 
-  /* .passwords-main {
-    height: 100vh;
-  } */
-
-
   .logo-and-create-password-wrapper {
     display: flex;
     justify-content: center;

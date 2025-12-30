@@ -26,9 +26,16 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
+    padding: 50px;
+    gap: 20px;
   }
   .rapport-item-container {
     width:  30%;
-    
+    height: 300px;
+    border: 1px solid #6fbd96;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>
