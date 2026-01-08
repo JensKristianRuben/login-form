@@ -79,7 +79,7 @@ router.post("/api/register", async (req, res) => {
 
                   <tr>
                     <td align="center" style="padding: 30px 0 40px 0;">
-                      <a href="${activationLink}" style="background-color: #6fbd96; color: #001a0d; padding: 14px 30px; text-decoration: none; font-weight: bold; border-radius: 8px; display: inline-block; font-size: 16px;">
+                      <a href="${activationLink}" style="background-color: #6fbd96; color: #001a0d; padding: 14px 30px; text-decoration: none; font-weight: 300; border-radius: 8px; display: inline-block; font-size: 16px;">
                         Activate Account
                       </a>
                     </td>

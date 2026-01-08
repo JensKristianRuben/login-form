@@ -45,6 +45,11 @@
       credentials: "include",
     });
 
+    if (!response.ok) {
+      const result = await response.json();
+      toastr.error(result.error);
+    }
+
     if (response.status === 200) {
       const result = await response.json();
 

@@ -84,14 +84,16 @@
   }
 
   .logo {
-    width: 150px;
+    width: 250px;
     height: auto;
+    
   }
 
   h1 {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     color: #ffffff;
     margin: 0;
+    font-weight: 300;
   }
 
   .login-btn {
