@@ -150,7 +150,7 @@
       name="password"
       bind:value={password}
     />
-    <a class="forgot-password" href="/forgotPassword">Forgot Password?</a>
+    <a class="forgot-password" href="/forgot-password">Forgot Password?</a>
     <button type="submit">Login</button>
   </form>
   <div class="info-box left-info">

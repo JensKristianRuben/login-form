@@ -10,6 +10,8 @@
   import PasswordGeneratorPage from "./pages/PasswordGeneratorPage/PasswordGeneratorPage.svelte";
   import SecurityRapportPage from "./pages/SecurityRapportPage/SecurityRapportPage.svelte";
   import TwofactorAuthentication from "./pages/TwoFactorAuthentication/TwofactorAuthentication.svelte";
+  import ForgotPasswordPage from "./pages/ForgotPasswordpage/ForgotPasswordPage.svelte";
+  import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage.svelte";
 
   onMount(async () => {
     try {
@@ -55,7 +57,9 @@
     />
   </Route>
 
-  <Route path="activation"><ActivationPage /></Route>
+  <Route path="/activation"><ActivationPage /></Route>
+  <Route path="/forgot-password"><ForgotPasswordPage /></Route>
+  <Route path="/reset-password"><ResetPasswordPage /></Route>
   <PrivateRouteGuard path="/passwords" component={PasswordPage} />
   <PrivateRouteGuard path="/generator" component={PasswordGeneratorPage} />
   <PrivateRouteGuard path="/rapport" component={SecurityRapportPage} />

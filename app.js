@@ -9,6 +9,7 @@ import sessionRouter from "./routers/sessionRouter.js";
 import passwordRouter from './routers/passwordsRouter.js'
 import activationPage from './routers/activationRouter.js';
 import twoFactorRouter from './routers/twoFactorRouter.js'
+import forgotPasswordRouter from './routers/forgotPasswordRouter.js'
 import resetPasswordRouter from './routers/resetPasswordRouter.js'
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
@@ -74,6 +75,7 @@ app.use(sessionRouter);
 app.use(passwordRouter);
 app.use(twoFactorRouter);
 app.use(activationPage);
+app.use(forgotPasswordRouter);
 app.use(resetPasswordRouter);
  
 
