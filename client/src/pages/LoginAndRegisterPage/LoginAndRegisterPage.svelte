@@ -3,7 +3,11 @@
   import { onMount } from "svelte";
   import { user, redirectAfterLogin } from "../../stores/clientAuth.js";
   import TwoFactorAuthModal from "./Components/TwoFactorAuthModal.svelte";
-
+  import toastr from "toastr";
+  
+  let email = $state("alice@example.com");
+  let password = $state("123456789");
+  let shakeForm = $state(false);
   let mode = $state("login");
   let isTwoFactorAuthModalOpen = $state(false);
 
@@ -28,9 +32,6 @@
     else mode = "register";
   });
 
-  let email = $state("alice@example.com");
-  let password = $state("123456789");
-  let shakeForm = $state(false);
 
   async function handleLogin(event) {
     event.preventDefault();
@@ -76,6 +77,7 @@
 
     if (registerPassword !== registerPassword2) {
       passwordMismatch = true;
+      toastr.error("Passwords are not matching")
       return;
     }
     passwordMismatch = false;
@@ -92,14 +94,17 @@
 
     if (!response.ok) {
       const result = await response.json();
-      return console.error("there was an error registering: ", result.error);
+      toastr.error("There was an error registering");
+      
+      return console.error("There was an error registering: ", result.error);
     }
 
     if (response.ok) {
-      navigate("/#login");
-      window.location.reload();
+      toastr.success("Remember to activate you account - Check your mailbox!", "Successfully Registered!")
+      goToLogin();
+      
     } else {
-      console.error("Registration failed");
+      toastr.error("Registration Failed")
     }
   }
 </script>

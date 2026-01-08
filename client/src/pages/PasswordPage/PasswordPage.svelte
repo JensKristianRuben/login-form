@@ -1,10 +1,10 @@
 <script>
-  import PasswordCard from "../../components/passwordPage/passwordCard.svelte";
+  import PasswordCard from "./Components/passwordCard.svelte";
   import Sidebar from "../../components/Sidebar.svelte";
-  import CreatePasswordModal from "../../components/passwordPage/CreatePasswordModal.svelte";
-  import MasterPasswordModal from "../../components/passwordPage/MasterPasswordModal.svelte";
-  import ConfirmModal from "../../components/passwordPage/ConfirmModal.svelte";
-  import EditPasswordModal from "../../components/passwordPage/EditPasswordModal.svelte";
+  import CreatePasswordModal from "./Components/CreatePasswordModal.svelte";
+  import MasterPasswordModal from "./Components/MasterPasswordModal.svelte";
+  import ConfirmModal from "./Components/ConfirmModal.svelte";
+  import EditPasswordModal from "./Components/EditPasswordModal.svelte";
   import { decryptPassword } from "./passwordPage.js";
   import { flip } from "svelte/animate";
   import { fly, fade } from "svelte/transition";
@@ -16,10 +16,8 @@
   let selectedPasswordId = $state(null);
   let decryptedPasswords = $state({});
   let searchQuery = $state("");
-
   let isEditModalOpen = $state(false);
   let passwordToEdit = $state(null);
-
   let passwordsList = $state([]);
   let passwordToDeleteId = $state(null);
 
@@ -121,8 +119,6 @@
     }
   }
 
-  // ______________DELETE________________
-
   function handleDeletePasswordCard(id) {
     passwordToDeleteId = id;
     isConfirmModalOpen = true;
@@ -194,8 +190,6 @@
   <div class="search-wrapper">
     
     <SearchIcon/>
-
-
 
     <input
       type="text"

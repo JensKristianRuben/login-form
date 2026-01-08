@@ -9,7 +9,6 @@
   import PrivateRouteGuard from "./components/PrivateRouteGuard.svelte";
   import PasswordGeneratorPage from "./pages/PasswordGeneratorPage/PasswordGeneratorPage.svelte";
   import SecurityRapportPage from "./pages/SecurityRapportPage/SecurityRapportPage.svelte";
-  import TwoFactorAuthModal from "./pages/LoginAndRegisterPage/Components/TwoFactorAuthModal.svelte";
   import TwofactorAuthentication from "./pages/TwoFactorAuthentication/TwofactorAuthentication.svelte";
 
   onMount(async () => {
@@ -22,7 +21,7 @@
         user.set(data.user);
 
         if (window.location.pathname === "/") {
-          navigate("/passwords", {replace: true})
+          navigate("/passwords", { replace: true });
         }
       } else {
         user.set(null);
@@ -50,15 +49,18 @@
 <Router>
   <Route path="/">
     <LoginAndRegisterPage
-    {mode}
+      {mode}
       on:goLogin={goToLogin}
       on:goRegister={goToRegister}
     />
   </Route>
-  
-  <Route path="/activation"><ActivationPage /></Route>
+
+  <Route path="activation"><ActivationPage /></Route>
   <PrivateRouteGuard path="/passwords" component={PasswordPage} />
   <PrivateRouteGuard path="/generator" component={PasswordGeneratorPage} />
   <PrivateRouteGuard path="/rapport" component={SecurityRapportPage} />
-  <PrivateRouteGuard path="/twofactorauthentication" component={TwofactorAuthentication}/>
+  <PrivateRouteGuard
+    path="/twofactorauthentication"
+    component={TwofactorAuthentication}
+  />
 </Router>

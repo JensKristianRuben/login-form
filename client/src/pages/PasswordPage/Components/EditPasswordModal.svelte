@@ -1,6 +1,6 @@
 <script>
   import toastr from "toastr";
-  import { encryptPassword, verifyMasterKey } from "../../util/cryptoUtil.js";
+  import { encryptPassword, verifyMasterKey } from "../../../util/cryptoUtil.js";
 
   const { onClose, class: className, onSave, passwordData } = $props();
 

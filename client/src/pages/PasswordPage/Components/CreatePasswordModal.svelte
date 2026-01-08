@@ -1,9 +1,9 @@
 <script>
   import toastr from "toastr";
-  import { encryptPassword, verifyMasterKey } from "../../util/cryptoUtil.js";
-  import { generateRandomPassword } from "../../util/randomUtil.js";
-  import DiceIcon from "../icons/DiceIcon.svelte";
-  import CrossIcon from "../icons/CrossIcon.svelte";
+  import { encryptPassword, verifyMasterKey } from "../../../util/cryptoUtil.js";
+  import { generateRandomPassword } from "../../../util/randomUtil.js";
+  import DiceIcon from "../../../components/icons/DiceIcon.svelte";
+  import CrossIcon from "../../../components/icons/CrossIcon.svelte";
 
   const { onClose, class: className, onSave, existingPasswords } = $props();
 

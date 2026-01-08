@@ -1,21 +1,21 @@
 <script>
   import { user, redirectAfterLogin } from "../stores/clientAuth.js";
-  import { navigate, Route } from "svelte-routing";
-
+  import { navigate, Route, useLocation } from "svelte-routing";
 
   let { path, component: Component } = $props();
 
-  $effect(() => {
-    if ($user === null) {
-      redirectAfterLogin.set(path)
-      navigate("/", {replace: true})
-    }
-  })
+  const location = useLocation();
 
+  $effect(() => {    
+    if ($user === null && $location.pathname === path) {
+      redirectAfterLogin.set(path);
+      navigate("/", { replace: true });
+    }
+  });
 </script>
 
-<Route {path} >
+<Route {path}>
   {#if $user}
-    <Component/>
+    <Component />
   {/if}
 </Route>

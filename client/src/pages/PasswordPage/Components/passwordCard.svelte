@@ -1,8 +1,8 @@
 <script>
-  import EditIcon from "../icons/EditIcon.svelte";
-  import DeleteIcon from "../icons/DeleteIcon.svelte";
-  import CopyIcon from "../icons/CopyIcon.svelte";
-  import EyeIcon from "../icons/EyeIcon.svelte";
+  import EditIcon from "../../../components/icons/EditIcon.svelte";
+  import DeleteIcon from "../../../components/icons/DeleteIcon.svelte";
+  import CopyIcon from "../../../components/icons/CopyIcon.svelte";
+  import EyeIcon from "../../../components/icons/EyeIcon.svelte";
 
   let {
     title,
