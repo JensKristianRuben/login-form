@@ -20,6 +20,7 @@
   let passwordToEdit = $state(null);
   let passwordsList = $state([]);
   let passwordToDeleteId = $state(null);
+  let isLoading = $state(true);
 
   let filteredPasswords = $derived(
     passwordsList.filter((password) => {
@@ -51,13 +52,22 @@
   }
 
   async function fetchPasswords() {
-    let response = await fetch("http://localhost:8080/api/passwords", {
-      method: "GET",
-      credentials: "include",
-    });
+    try {
+      let response = await fetch("http://localhost:8080/api/passwords", {
+        method: "GET",
+        credentials: "include",
+      });
 
-    const data = await response.json();
-    passwordsList = data;
+      if (response.ok) {
+        const data = await response.json();
+        passwordsList = data;
+      }
+    } catch (error) {
+      console.error("Error fetching passwords:", error);
+      toastr.error("Could not load passwords");
+    } finally {
+      isLoading = false;
+    }
   }
 
   onMount(fetchPasswords);
@@ -136,15 +146,12 @@
       );
 
       if (response.ok) {
-
-
         passwordsList = passwordsList.filter(
           (p) => String(p.id) !== String(passwordToDeleteId)
         );
-        toastr.success("Password succesfully deleted")
-
+        toastr.success("Password succesfully deleted");
       } else {
-        toastr.error("Could not delete")
+        toastr.error("Could not delete");
       }
     } catch (error) {
       console.error(error);
@@ -156,14 +163,14 @@
 <Sidebar />
 
 <CreatePasswordModal
-  onClose={() => isCreatePasswordModalOpen = false}
+  onClose={() => (isCreatePasswordModalOpen = false)}
   class={isCreatePasswordModalOpen ? "is-open" : ""}
   onSave={handleNewPassword}
   existingPasswords={passwordsList}
 />
 
 <MasterPasswordModal
-  onClose={() => isMasterPasswordModalOpen = false}
+  onClose={() => (isMasterPasswordModalOpen = false)}
   class={isMasterPasswordModalOpen ? "is-open" : ""}
   onVerify={handleMasterPasswordVerification}
 />
@@ -182,51 +189,77 @@
 />
 
 <main class="passwords-main">
-  <div class="logo-and-create-password-wrapper">
-    <img src="/a-way-in.png" alt="awayinvault logo" class="logo-create-btn" />
-    <h1>AwayinVault</h1>
-    <button class="add-password-button" onclick={() => isCreatePasswordModalOpen = true}>+</button>
-  </div>
-  <div class="search-wrapper">
-    
-    <SearchIcon/>
+  {#if isLoading}
+    <div class="loading-state">
+      <p>Accessing Vault...</p>
+    </div>
+  {:else if passwordsList.length === 0}
+    <div class="empty-state" in:fade={{ duration: 400 }}>
+      <img src="/a-way-in.png" alt="logo" class="empty-logo" />
+      <h1>AwayinVault</h1>
 
-    <input
-      type="text"
-      name="passwordsSearchBar"
-      id="passwordsSearchBar"
-      placeholder="search passwords..."
-      class="passwords-search-bar"
-      bind:value={searchQuery}
-    />
-  </div>
-
-  <div class="passwords-grid">
-    {#each filteredPasswords as password (password.id)}
-      <div
-        animate:flip={{ duration: 300 }}
-        in:fly={{ y: 20, duration: 300 }}
-        out:fade={{ duration: 200 }}
-        class="card-wrapper"
-      >
-        <PasswordCard
-          title={password.website}
-          username={password.username}
-          encrypted_password={password.encrypted_password}
-          onWatchClick={() =>
-            openMasterPasswordModal(password.id, password.encrypted_password)}
-          decrypted_password={decryptedPasswords[password.id]}
-          onDeleteClick={() => handleDeletePasswordCard(password.id)}
-          id={password.id}
-          onEdit={() => openEditModal(password)}
-        />
+      <div class="empty-text-content">
+        <h2>The Vault is Empty</h2>
+        <p>
+          Your digital security starts here. Create your first secure entry.
+        </p>
       </div>
-    {/each}
-  </div>
+
+      <button
+        class="cta-button"
+        onclick={() => (isCreatePasswordModalOpen = true)}
+      >
+        Create First Password
+      </button>
+    </div>
+  {:else}
+    <div class="logo-and-create-password-wrapper" in:fade>
+      <img src="/a-way-in.png" alt="awayinvault logo" class="logo-create-btn" />
+      <h1>AwayinVault</h1>
+      <button
+        class="add-password-button"
+        onclick={() => (isCreatePasswordModalOpen = true)}>+</button
+      >
+    </div>
+
+    <div class="search-wrapper" in:fade>
+      <SearchIcon />
+      <input
+        type="text"
+        name="passwordsSearchBar"
+        id="passwordsSearchBar"
+        placeholder="search passwords..."
+        class="passwords-search-bar"
+        bind:value={searchQuery}
+      />
+    </div>
+
+    <div class="passwords-grid">
+      {#each filteredPasswords as password (password.id)}
+        <div
+          animate:flip={{ duration: 300 }}
+          in:fly={{ y: 20, duration: 300 }}
+          out:fade={{ duration: 200 }}
+          class="card-wrapper"
+        >
+          <PasswordCard
+            title={password.website}
+            username={password.username}
+            encrypted_password={password.encrypted_password}
+            onWatchClick={() =>
+              openMasterPasswordModal(password.id, password.encrypted_password)}
+            decrypted_password={decryptedPasswords[password.id]}
+            onDeleteClick={() => handleDeletePasswordCard(password.id)}
+            id={password.id}
+            onEdit={() => openEditModal(password)}
+          />
+        </div>
+      {/each}
+    </div>
+  {/if}
 </main>
 
 <style>
-
   .logo-and-create-password-wrapper {
     display: flex;
     justify-content: center;
@@ -306,5 +339,90 @@
     padding: 20px;
     gap: 20px;
     justify-items: center;
+  }
+
+  .empty-logo {
+    width: 150px;
+    height: auto;
+    margin-bottom: 20px;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .empty-state h1 {
+    font-size: 3rem;
+    color: #6fbd96;
+    margin-bottom: 40px;
+    font-weight: 700;
+  }
+
+  .empty-text-content {
+    margin-bottom: 30px;
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+
+  .loading-state {
+    text-align: center;
+    margin-top: 100px;
+    color: #6fbd96;
+    font-size: 1.2rem;
+    font-family: "Montserrat", sans-serif;
+    animation: pulse 1.5s infinite;
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+    color: white;
+
+    padding: 60px;
+    border-radius: 20px;
+    border: 1px solid rgba(111, 189, 150, 0.1);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+  }
+
+  .empty-state p {
+    color: #ccc;
+    font-size: 1rem;
+    max-width: 400px;
+    line-height: 1.6;
+    margin: 0 auto 30px auto;
+  }
+
+  .cta-button {
+    background-color: #6fbd96;
+    color: #001a0d;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 15px 40px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .cta-button:hover {
+    background-color: #00ff80;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 0 30px rgba(0, 255, 128, 0.6);
   }
 </style>
