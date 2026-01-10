@@ -1,14 +1,17 @@
 <script>
+  import toastr from "toastr";
   import EditIcon from "../../../components/icons/EditIcon.svelte";
   import DeleteIcon from "../../../components/icons/DeleteIcon.svelte";
   import CopyIcon from "../../../components/icons/CopyIcon.svelte";
   import EyeIcon from "../../../components/icons/EyeIcon.svelte";
+
 
   let {
     title,
     username,
     encrypted_password,
     onWatchClick,
+    onCopyClick,
     decrypted_password,
     onDeleteClick,
     id,
@@ -34,8 +37,9 @@
   function handleCopyPassword() {
     if (decrypted_password) {
       navigator.clipboard.writeText(decrypted_password);
+      toastr.success("Password copied!");
     } else {
-      navigator.clipboard.writeText(encrypted_password);
+      onCopyClick();
     }
   }
 </script>
@@ -94,7 +98,7 @@
     flex-direction: row;
     justify-content: space-between;
     background-color: #17362680;
-    
+
     border-radius: 5px;
     padding: 10px;
   }
@@ -111,5 +115,6 @@
   .passwords-grid-container-info-item-wrapper p {
     color: white;
     margin: 0;
+    font-family: "Montserrat", sans-serif;
   }
 </style>

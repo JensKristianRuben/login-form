@@ -6,6 +6,7 @@
   import PasswordPage from "./pages/PasswordPage/PasswordPage.svelte";
   import ActivationPage from "./pages/ActivationPage/ActivationPage.svelte";
   import toastr from "toastr";
+  import { configureToastr } from "./config/toastrConfig.js";
   import PrivateRouteGuard from "./components/PrivateRouteGuard.svelte";
   import PasswordGeneratorPage from "./pages/PasswordGeneratorPage/PasswordGeneratorPage.svelte";
   import SecurityRapportPage from "./pages/SecurityRapportPage/SecurityRapportPage.svelte";
@@ -46,6 +47,8 @@
     mode = "register";
     window.history.replaceState(null, "", "/#register");
   }
+
+  configureToastr();
 </script>
 
 <Router>

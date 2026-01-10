@@ -114,7 +114,7 @@
         <div style="margin-top: 20px;">
           <CheckIcon />
         </div>
-        <p class="status-text">Unique passwords!</p>
+        
       {:else}
         <div class="reuse-list">
           {#each reusedPasswordsList as group, i}

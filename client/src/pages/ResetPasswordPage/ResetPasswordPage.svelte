@@ -96,7 +96,7 @@
         {#if isLoading}
           Updating...
         {:else}
-          Establish New Link
+          Update Password
         {/if}
       </button>
     </form>

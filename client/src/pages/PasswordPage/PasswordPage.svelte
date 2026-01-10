@@ -22,6 +22,7 @@
   let passwordsList = $state([]);
   let passwordToDeleteId = $state(null);
   let isLoading = $state(true);
+  let shouldCopyAfterDecrypt = $state(false);
 
   let filteredPasswords = $derived(
     passwordsList.filter((password) => {
@@ -88,9 +89,11 @@
     isMasterPasswordModalOpen = false;
   }
 
-  function openMasterPasswordModal(id, encryptedPassword) {
+  function openMasterPasswordModal(id, encryptedPassword, autoCopy = false) {
     selectedPasswordId = id;
     passwordToDecrypt = encryptedPassword;
+
+    shouldCopyAfterDecrypt = autoCopy;
 
     isMasterPasswordModalOpen = true;
   }
@@ -101,7 +104,12 @@
   }
 
   async function handleMasterPasswordVerification(masterPassword) {
-    const decryptedResult = await decryptPassword(passwordToDecrypt, masterPassword);
+    const currentId = selectedPasswordId;
+
+    const decryptedResult = await decryptPassword(
+      passwordToDecrypt,
+      masterPassword
+    );
 
     if (!decryptedResult) {
       console.error("Wrong masterpassword or decryption failed");
@@ -109,27 +117,34 @@
       return;
     }
 
-    decryptedPasswords = {
-      ...decryptedPasswords,
-      [selectedPasswordId]: decryptedResult,
-    };
+    if (shouldCopyAfterDecrypt) {
 
-    setTimeout(() => {
-      const tempPasswords = { ...decryptedPasswords };
-      delete tempPasswords[selectedPasswordId];
-      decryptedPasswords = tempPasswords;
-    }, 5000);
-    
+      navigator.clipboard.writeText(decryptedResult);
+      toastr.success("Password copied to clipboard!");
+      
+      shouldCopyAfterDecrypt = false;
+    } else {
+      decryptedPasswords = {
+        ...decryptedPasswords,
+        [currentId]: decryptedResult,
+      };
+
+      setTimeout(() => {
+        const tempPasswords = { ...decryptedPasswords };
+        delete tempPasswords[currentId];
+        decryptedPasswords = tempPasswords;
+      }, 5000);
+    }
+
     passwordToDecrypt = null;
     selectedPasswordId = null;
   }
-
   function handleDeletePasswordCard(id) {
     passwordToDeleteId = id;
     isConfirmModalOpen = true;
   }
 
-  async function executeDeletion() {
+  async function handleDelete() {
     if (!passwordToDeleteId) return;
     try {
       const response = await fetch(
@@ -173,7 +188,7 @@
 <ConfirmModal
   onClose={closeConfirmModal}
   class={isConfirmModalOpen ? "is-open" : ""}
-  onConfirm={executeDeletion}
+  onConfirm={handleDelete}
 />
 
 <EditPasswordModal
@@ -243,6 +258,8 @@
             encrypted_password={password.encrypted_password}
             onWatchClick={() =>
               openMasterPasswordModal(password.id, password.encrypted_password)}
+            onCopyClick={() =>
+              openMasterPasswordModal(password.id, password.encrypted_password, true)}
             decrypted_password={decryptedPasswords[password.id]}
             onDeleteClick={() => handleDeletePasswordCard(password.id)}
             id={password.id}

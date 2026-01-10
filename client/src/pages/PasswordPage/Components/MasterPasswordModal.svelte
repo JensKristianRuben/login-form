@@ -1,9 +1,20 @@
 <script>
+  import ConfirmIcon from "../../../components/icons/ConfirmIcon.svelte";
   const { onClose, class: className, onVerify } = $props();
+  
 
-  let masterPassword = $state();
+  let masterPassword = $state("");
 
   function handleKeydown(event) {
+    if (event.key === "Escape") {
+      onClose?.();
+    }
+  }
+
+  function handleInputKeydown(event) {
+    if (event.key === "Enter") {
+      handleVerifyClick();
+    }
     if (event.key === "Escape") {
       onClose?.();
     }
@@ -17,10 +28,8 @@
     if (masterPassword) {
       onVerify?.(masterPassword);
       masterPassword = "";
-      onClose?.();
       return;
     }
-    onClose?.();
   }
 </script>
 
@@ -38,27 +47,20 @@
     role="button"
     tabindex="0"
   >
-    <p>Enter your master password to view your password</p>
-    <div class="password-and-brn-wrapper">
+    <div class="header">
+      <h3>Decrypt check</h3>
+      <p>Confirm your masterpassword</p>
+    </div>
+
+    <div class="password-and-btn-wrapper">
       <input
         type="password"
-        placeholder="Masterpassword"
+        placeholder="Master Password"
         bind:value={masterPassword}
+        onkeydown={handleInputKeydown}
       />
       <button aria-label="check-password" onclick={handleVerifyClick}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          width="24px"
-          height="24px"
-        >
-          <polyline points="20 6 9 17 4 12"></polyline>
-        </svg>
+        <ConfirmIcon/>
       </button>
     </div>
   </div>
@@ -71,16 +73,15 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 26, 13, 0.85);
+    backdrop-filter: blur(5px);
     z-index: 999;
     display: flex;
     justify-content: center;
     align-items: center;
     opacity: 0;
     visibility: hidden;
-    transition:
-      opacity 0.3s ease,
-      visibility 0.3s ease;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
   }
 
   .backlay.is-open {
@@ -90,51 +91,92 @@
 
   .dialog {
     background: #001a0d;
-    padding: 1rem;
-    border-radius: 10px;
-    padding: 20px;
-    gap: 20px;
+    padding: 30px;
+    border-radius: 15px;
     border: 1px solid #6fbd96;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 0 30px rgba(0, 255, 128, 0.15);
+    transform: scale(0.95);
+    transition: transform 0.2s ease;
   }
 
-  .backlay p {
+  .backlay.is-open .dialog {
+    transform: scale(1);
+  }
+
+  .header {
     display: flex;
-    justify-content: flex-start;
-    color: white;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .header h3 {
+    color: #6fbd96;
     font-family: "Montserrat", sans-serif;
-    font-weight: 700;
+    margin: 0;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .header p {
+    color: #a0c4b0;
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .password-and-btn-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
   }
 
   .dialog input {
-    width: 80%;
+    flex-grow: 1;
     padding: 12px 15px;
-    background-color: #17362680;
-    border-radius: 10px;
-    border: none;
-    transition: all 0.3s ease;
+    background-color: rgba(23, 54, 38, 0.6);
+    border: 1px solid transparent;
+    border-radius: 8px;
     color: white;
+    font-family: "Montserrat", sans-serif;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
   }
 
-  .password-and-brn-wrapper {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 10px;
+  .dialog input:focus {
+    border-color: #6fbd96;
+    box-shadow: 0 0 10px rgba(111, 189, 150, 0.3);
+    background-color: rgba(23, 54, 38, 0.9);
   }
+
   .dialog button {
-    background-color: #001a0d;
+    background-color: #6fbd96;
     border: none;
-    width: 30%;
+    border-radius: 8px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .dialog button:hover {
+    background-color: #00ff80;
+    box-shadow: 0 0 15px rgba(0, 255, 128, 0.4);
+    transform: translateY(-1px);
   }
 
   .dialog svg {
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .dialog svg:hover {
-    color: #6fbd96;
-    scale: 1.1;
+    color: #001a0d;
   }
 </style>
