@@ -2,6 +2,7 @@
   import { navigate } from "svelte-routing";
   import { user } from "../../../stores/clientAuth";
   import toastr from "toastr";
+  import { API_URL } from "../../../config/fetchConfig";
 
   let { class: className, onClose } = $props();
   let otpValue = $state(["", "", "", "", "", ""]);
@@ -27,7 +28,7 @@
 
     if (fullCode.length === 6) {
       const response = await fetch(
-        "http://localhost:8080/api/login/verify-2fa",
+        `${API_URL}/api/login/verify-2fa`,
         {
           method: "POST",
           credentials: "include",

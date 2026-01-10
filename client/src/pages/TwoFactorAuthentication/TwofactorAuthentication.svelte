@@ -1,9 +1,9 @@
 <script>
-  import { onMount } from "svelte";
-  import Sidebar from "../../components/sidebar.svelte";
+  import Sidebar from "../../components/Sidebar.svelte";
   import toastr from "toastr";
   import { user } from "../../stores/clientAuth";
   import SheildIcon from "../../components/icons/SheildIcon.svelte";
+  import { API_URL } from "../../config/fetchConfig";
 
   let qrcode = $state("");
   let secretCode = $state("");
@@ -20,7 +20,7 @@
   });
 
   async function handleSetUp2FA() {
-    const response = await fetch("http://localhost:8080/api/setup-2fa", {
+    const response = await fetch(`${API_URL}/api/setup-2fa`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -67,7 +67,7 @@
     const fullCode = otpValue.join("");
 
     if (fullCode.length === 6) {
-      const response = await fetch("http://localhost:8080/api/verify", {
+      const response = await fetch(`${API_URL}/api/verify`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "Application/json" },

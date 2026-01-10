@@ -1,6 +1,7 @@
 <script>
   import { navigate } from "svelte-routing";
   import toastr from "toastr";
+  import { API_URL } from "../../config/fetchConfig";
 
   let email = $state("");
   let isLoading = $state(false);
@@ -15,7 +16,7 @@
     isLoading = true;
 
     try {
-      const response = await fetch("http://localhost:8080/api/forgot-password", {
+      const response = await fetch(`${API_URL}/api/forgot-password`, {
         method: "POST",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify({ email }),

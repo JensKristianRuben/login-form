@@ -10,6 +10,7 @@
   import { onMount } from "svelte";
   import { io } from "socket.io-client";
   import toastr from "toastr";
+  import { API_URL } from "../../config/fetchConfig";
 
   let password = $state("");
   let socket;
@@ -46,7 +47,7 @@
     }
   }
   onMount(() => {
-    socket = io("http://localhost:8080");
+    socket = io(API_URL);
 
     socket.on("server-password", (newPassword) => {
       password = newPassword;

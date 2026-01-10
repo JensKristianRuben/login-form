@@ -2,6 +2,7 @@
   import { navigate } from "svelte-routing";
   import { onMount } from "svelte";
   import toastr from "toastr";
+  import { API_URL } from "../../config/fetchConfig";
 
   let password = $state("");
   let confirmPassword = $state("");
@@ -33,7 +34,7 @@
     isLoading = true;
 
     try {
-      const response = await fetch("http://localhost:8080/api/reset-password", {
+      const response = await fetch(`${API_URL}/api/reset-password`, {
         method: "POST",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify({ 

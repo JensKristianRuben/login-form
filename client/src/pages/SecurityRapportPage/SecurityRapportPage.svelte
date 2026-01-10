@@ -4,6 +4,7 @@
   import CheckIcon from "../../components/icons/CheckIcon.svelte";
   import { findReusedPasswords } from "../../util/cryptoUtil.js";
   import MasterPasswordModal from "../PasswordPage/Components/MasterPasswordModal.svelte";
+  import { API_URL } from "../../config/fetchConfig";
 
   let amountOfPasswords = $state();
   let vulnarblePasswords = $state([]);
@@ -13,7 +14,7 @@
 
   onMount(async () => {
     const countPasswordsResponse = await fetch(
-      "http://localhost:8080/api/passwords/count",
+      `${API_URL}/api/passwords/count`,
       {
         credentials: "include",
         headers: {
@@ -23,7 +24,7 @@
     );
 
     const expiredPasswordsResponse = await fetch(
-      "http://localhost:8080/api/passwords/expired",
+      `${API_URL}/api/passwords/expired`,
       {
         credentials: "include",
         headers: {
@@ -51,7 +52,7 @@
     isScanning = true;
 
     try {
-      const response = await fetch("http://localhost:8080/api/passwords", {
+      const response = await fetch(`${API_URL}/api/passwords`, {
         credentials: "include",
       });
 
@@ -310,17 +311,5 @@
   .reuse-tag:hover {
     background: #ff9f43;
     color: #001a0d;
-  }
-
-  .retry-btn {
-    background: none;
-    border: none;
-    color: #6fbd96;
-    text-decoration: underline;
-    cursor: pointer;
-    margin-top: 15px;
-    font-family: "Montserrat", sans-serif;
-    font-size: 12px;
-    opacity: 0.7;
   }
 </style>

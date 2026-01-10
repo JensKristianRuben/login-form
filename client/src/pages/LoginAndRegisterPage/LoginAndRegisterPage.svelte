@@ -4,6 +4,7 @@
   import { user, redirectAfterLogin } from "../../stores/clientAuth.js";
   import TwoFactorAuthModal from "./Components/TwoFactorAuthModal.svelte";
   import toastr from "toastr";
+  import { API_URL } from "../../config/fetchConfig.js";
 
   let email = $state("alice@example.com");
   let password = $state("123456789");
@@ -35,7 +36,7 @@
   async function handleLogin(event) {
     event.preventDefault();
 
-    const response = await fetch("http://localhost:8080/api/login", {
+    const response = await fetch(`${API_URL}/api/login`, {
       method: "POST",
       headers: { "Content-type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
@@ -85,7 +86,7 @@
     }
     passwordMismatch = false;
 
-    const response = await fetch("http://localhost:8080/api/register", {
+    const response = await fetch(`${API_URL}/api/register`, {
       method: "POST",
       headers: { "Content-type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
