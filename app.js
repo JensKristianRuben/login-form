@@ -85,7 +85,7 @@ io.on("connection", (socket) => {
     generatePassword(io, socket);
 });
 
-const PORT = Number(process.env.PORT);
+const PORT = Number(process.env.PORT) || 8080;
 
 server.listen(PORT, () => {
   console.log("Server is running on port: ", PORT);

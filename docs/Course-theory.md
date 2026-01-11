@@ -10,3 +10,4 @@ Den overvåger automatisk tilstande (state), og hvis de ændrer sig – f.eks. a
 # NOTES
 
 Session store skal være soleklart
+sæt varabler lokalt ved app start
