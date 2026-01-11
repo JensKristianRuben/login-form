@@ -13,6 +13,7 @@ router.get("/api/passwords", requireAuth, async (req, res) => {
       .select("*")
       .eq("user_id", userId);
 
+
     if (error) {
       console.error("Couldnt read passwords", error.message);
       return res.status(500).send({ error: "Database error" });

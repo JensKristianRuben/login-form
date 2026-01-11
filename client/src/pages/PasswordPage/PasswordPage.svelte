@@ -57,7 +57,7 @@
 
   async function fetchPasswords() {
     try {
-      let response = await fetch(`${API_URL}/api/passwords`, {
+      const response = await fetch(`${API_URL}/api/passwords`, {
         method: "GET",
         credentials: "include",
       });
