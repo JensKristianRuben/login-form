@@ -13,10 +13,11 @@
   import TwofactorAuthentication from "./pages/TwoFactorAuthentication/TwofactorAuthentication.svelte";
   import ForgotPasswordPage from "./pages/ForgotPasswordpage/ForgotPasswordPage.svelte";
   import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage.svelte";
+  import { API_URL } from "./config/fetchConfig";
 
   onMount(async () => {
     try {
-      const res = await fetch("http://localhost:8080/api/session", {
+      const res = await fetch(`${API_URL}/api/session`, {
         credentials: "include",
       });
       if (res.ok) {
@@ -30,7 +31,6 @@
         user.set(null);
       }
     } catch (err) {
-      toastr.error("you DO NOT have a SESSION my friend");
       console.error("Failed to fetch session:", err);
       user.set(null);
     }
