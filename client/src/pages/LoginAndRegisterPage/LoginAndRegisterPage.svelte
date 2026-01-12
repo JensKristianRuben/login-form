@@ -7,7 +7,7 @@
   import { API_URL } from "../../config/fetchConfig.js";
 
   let email = $state("jeha0003@stud.ek.dk");
-  let password = $state("123456789");
+  let password = $state("1234");
   let shakeForm = $state(false);
   let mode = $state("login");
   let isTwoFactorAuthModalOpen = $state(false);
